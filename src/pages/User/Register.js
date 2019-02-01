@@ -184,21 +184,69 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('userId', {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
+                  message: formatMessage({ id: 'validation.userId.required' }),
                 },
                 {
-                  type: 'email',
-                  message: formatMessage({ id: 'validation.email.wrong-format' }),
+                  type: 'userId',
+                  message: formatMessage({ id: 'validation.userId.wrong-format' }),
                 },
               ],
             })(
-              <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
+              <Input size="large" placeholder={formatMessage({ id: 'form.userId.placeholder' })} />
             )}
           </FormItem>
+          <FormItem>
+            {getFieldDecorator('userName', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.userName.required' }),
+                },
+                {
+                  type: 'userName',
+                  message: formatMessage({ id: 'validation.userName.wrong-format' }),
+                },
+              ],
+            })(
+              <Input size="large" placeholder={formatMessage({ id: 'form.userName.placeholder' })} />
+            )}
+          </FormItem>
+          <FormItem>
+            <InputGroup compact>
+              <Select
+                size="large"
+                value={prefix}
+                onChange={this.changePrefix}
+                style={{ width: '20%' }}
+              >
+                <Option value="86">+86</Option>
+                <Option value="87">+87</Option>
+              </Select>
+              {getFieldDecorator('mobile', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.phone-number.required' }),
+                  },
+                  {
+                    pattern: /^\d{11}$/,
+                    message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
+                  },
+                ],
+              })(
+                <Input
+                  size="large"
+                  style={{ width: '80%' }}
+                  placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
+                />
+              )}
+            </InputGroup>
+          </FormItem>
+          
           <FormItem help={help}>
             <Popover
               getPopupContainer={node => node.parentNode}
@@ -249,68 +297,7 @@ class Register extends Component {
               />
             )}
           </FormItem>
-          <FormItem>
-            <InputGroup compact>
-              <Select
-                size="large"
-                value={prefix}
-                onChange={this.changePrefix}
-                style={{ width: '20%' }}
-              >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-              </Select>
-              {getFieldDecorator('mobile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.phone-number.required' }),
-                  },
-                  {
-                    pattern: /^\d{11}$/,
-                    message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
-                  },
-                ],
-              })(
-                <Input
-                  size="large"
-                  style={{ width: '80%' }}
-                  placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
-                />
-              )}
-            </InputGroup>
-          </FormItem>
-          <FormItem>
-            <Row gutter={8}>
-              <Col span={16}>
-                {getFieldDecorator('captcha', {
-                  rules: [
-                    {
-                      required: true,
-                      message: formatMessage({ id: 'validation.verification-code.required' }),
-                    },
-                  ],
-                })(
-                  <Input
-                    size="large"
-                    placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
-                  />
-                )}
-              </Col>
-              <Col span={8}>
-                <Button
-                  size="large"
-                  disabled={count}
-                  className={styles.getCaptcha}
-                  onClick={this.onGetCaptcha}
-                >
-                  {count
-                    ? `${count} s`
-                    : formatMessage({ id: 'app.register.get-verification-code' })}
-                </Button>
-              </Col>
-            </Row>
-          </FormItem>
+          
           <FormItem>
             <Button
               size="large"

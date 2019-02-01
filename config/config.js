@@ -72,13 +72,12 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/XService/rest': {
+      target: 'http://localhost:8080',
+      changeOrigin: false,
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
