@@ -13,9 +13,9 @@ export default {
   'app.register.register': '注册',
   'app.register.get-verification-code': '获取验证码',
   'app.register.sign-in': '使用已有账户登录',
-  'app.register-result.msg': '你的账户：{email} 注册成功',
+  'app.register-result.msg': '恭喜你 {email} 注册成功',
   'app.register-result.activation-email':
-    '激活邮件已发送到你的邮箱中，邮件有效期为24小时。请及时登录邮箱，点击邮件中的链接激活帐户。',
+    '注册成功，请妥善保管您的用户名密码，防止数据泄露。',
   'app.register-result.back-home': '返回首页',
   'app.register-result.view-mailbox': '查看邮箱',
   'validation.email.required': '请输入邮箱地址！',

@@ -13,14 +13,10 @@ export default {
   effects: {
     *submit({ payload }, { call, put }) {
       const response = yield call(fakeRegister, payload);
-      if (response.code === '200'){
-         yield put({
-          type: 'registerHandle',
-          payload: response,
-        });
-         yield put(routerRedux.replace("/User/Login"));
-      }
-     
+       yield put({
+        type: 'registerHandle',
+        payload: response,
+      });
     },
   },
 

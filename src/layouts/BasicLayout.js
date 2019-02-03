@@ -18,6 +18,7 @@ import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import { menu, title } from '../defaultSettings';
+import { getUserId } from '../utils/utils';
 
 import styles from './BasicLayout.less';
 
@@ -65,6 +66,7 @@ class BasicLayout extends React.PureComponent {
     } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+      payload: getUserId()
     });
     dispatch({
       type: 'setting/getSetting',

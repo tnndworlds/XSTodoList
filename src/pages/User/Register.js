@@ -50,8 +50,8 @@ class Register extends Component {
 
   componentDidUpdate() {
     const { form, register } = this.props;
-    const account = form.getFieldValue('mail');
-    if (register.status === 'ok') {
+    const account = form.getFieldValue('name');
+    if (register.status === '200') {
       router.push({
         pathname: '/user/register-result',
         state: {
@@ -99,14 +99,6 @@ class Register extends Component {
           type: 'register/submit',
           payload: {
             ...values
-          },
-          callback: (response)=>{
-            if (response.code==='200'){
-                
-            }
-            else{
-
-            }
           }
         });
       }
