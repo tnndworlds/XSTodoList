@@ -54,6 +54,7 @@ if (process.env.APP_TYPE === 'site') {
 
 export default {
   // add for transfer to umi
+  history: 'hash', // 默认是 browser
   plugins,
   define: {
     APP_TYPE: process.env.APP_TYPE || '',
@@ -73,7 +74,7 @@ export default {
     '@antv/data-set': 'DataSet',
   },
   proxy: {
-    '/XService/rest': {
+    '/XSService/rest': {
       target: 'http://localhost:8080',
       changeOrigin: false,
     },

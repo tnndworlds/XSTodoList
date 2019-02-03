@@ -98,9 +98,16 @@ class Register extends Component {
         dispatch({
           type: 'register/submit',
           payload: {
-            ...values,
-            prefix,
+            ...values
           },
+          callback: (response)=>{
+            if (response.code==='200'){
+                
+            }
+            else{
+
+            }
+          }
         });
       }
     });
@@ -184,15 +191,11 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('userId', {
+            {getFieldDecorator('id', {
               rules: [
                 {
                   required: true,
                   message: formatMessage({ id: 'validation.userId.required' }),
-                },
-                {
-                  type: 'userId',
-                  message: formatMessage({ id: 'validation.userId.wrong-format' }),
                 },
               ],
             })(
@@ -200,15 +203,11 @@ class Register extends Component {
             )}
           </FormItem>
           <FormItem>
-            {getFieldDecorator('userName', {
+            {getFieldDecorator('name', {
               rules: [
                 {
                   required: true,
                   message: formatMessage({ id: 'validation.userName.required' }),
-                },
-                {
-                  type: 'userName',
-                  message: formatMessage({ id: 'validation.userName.wrong-format' }),
                 },
               ],
             })(
@@ -226,7 +225,7 @@ class Register extends Component {
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
               </Select>
-              {getFieldDecorator('mobile', {
+              {getFieldDecorator('telNo', {
                 rules: [
                   {
                     required: true,

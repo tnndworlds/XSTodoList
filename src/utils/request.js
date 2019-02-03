@@ -64,6 +64,7 @@ const cachedSave = (response, hashcode) => {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, option) {
+  url = '/XSService' + url;
   const options = {
     expirys: isAntdPro(),
     ...option,
@@ -79,7 +80,7 @@ export default function request(url, option) {
     .digest('hex');
 
   const defaultOptions = {
-    credentials: 'include',
+    //credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
   if (
@@ -118,6 +119,7 @@ export default function request(url, option) {
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
+  console.log(url);
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => cachedSave(response, hashcode))
