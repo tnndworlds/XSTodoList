@@ -2,15 +2,6 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
-
-export function getUserId(){
-  const userId = sessionStorage.getItem('userId');
-  if (userId){
-    return userId;
-  }
-  return "";
-}
-
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }

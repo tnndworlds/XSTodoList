@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Layout } from 'antd';
+import MobileLayout from './MobileLayout';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -18,7 +19,7 @@ import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import { menu, title } from '../defaultSettings';
-import { getUserId } from '../utils/utils';
+import { getUserId } from '../utils/user';
 
 import styles from './BasicLayout.less';
 
@@ -183,10 +184,12 @@ class BasicLayout extends React.PureComponent {
             onCollapse={this.handleMenuCollapse}
             menuData={menuData}
             isMobile={isMobile}
-            {...this.props}
-          />
+            {...this.props} />
         )}
-        <Layout
+        {isMobile ? 
+        (<MobileLayout {...this.props}/>) 
+         : 
+        (<Layout
           style={{
             ...this.getLayoutStyle(),
             minHeight: '100vh',
@@ -197,15 +200,14 @@ class BasicLayout extends React.PureComponent {
             handleMenuCollapse={this.handleMenuCollapse}
             logo={logo}
             isMobile={isMobile}
-            {...this.props}
-          />
+            {...this.props} />
           <Content className={styles.content} style={contentStyle}>
             <Authorized authority={routerConfig} noMatch={<Exception403 />}>
               {children}
             </Authorized>
           </Content>
           <Footer />
-        </Layout>
+        </Layout>)}
       </Layout>
     );
     return (

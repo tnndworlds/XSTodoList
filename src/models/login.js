@@ -15,12 +15,14 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+      
       // Login successfully
+      console.log(response);
       if (response.code === '200') {
+        yield put({
+          type: 'loginSuccess',
+          payload: response,
+        });
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -38,6 +40,12 @@ export default {
           }
         }
         yield put(routerRedux.replace(redirect || '/'));
+      }
+      else{
+        yield put({
+          type: 'loginFailed',
+          payload: 'account'
+        });
       }
     },
 
@@ -67,11 +75,26 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.data.userEntity.type);
+      
+      return {
+         ...state,
+        status: "error",
+        type: 'account'
+      };
+    },
+    loginSuccess(state, { payload }) {
+      setAuthority(payload.data);
       return {
         ...state,
         status: payload.code,
         type: payload.data.userEntity.type
+      };
+    },
+    loginFailed(state, { payload }) {
+      return {
+        ...state,
+        status: "error",
+        type: 'account'
       };
     },
   },

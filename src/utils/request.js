@@ -83,6 +83,11 @@ export default function request(url, option) {
     //credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
+  newOptions.headers = {
+    ...newOptions.headers,
+    'userId': sessionStorage.getItem('userId'),
+    'token': sessionStorage.getItem('token'),
+  };
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||

@@ -18,7 +18,11 @@ export function getAuthority(str) {
   return authority || ['admin'];
 }
 
-export function setAuthority(authority) {
-  const proAuthority = typeof authority === 'string' ? [authority] : authority;
+export function setAuthority(userInfo) {
+  var userType = userInfo.userEntity.type;
+  console.log(userType);
+  const proAuthority = typeof userType === 'string' ? [userType] : userType;
+  sessionStorage.setItem('userId', userInfo.userId);
+  sessionStorage.setItem('token', userInfo.token);
   return localStorage.setItem('xs-authority', JSON.stringify(proAuthority));
 }
