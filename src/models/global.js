@@ -7,6 +7,7 @@ export default {
     collapsed: false,
     notices: [],
     loadedAllNotices: false,
+    isMobile: false,
   },
 
   effects: {

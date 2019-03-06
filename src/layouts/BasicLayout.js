@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Layout } from 'antd';
-import MobileLayout from './MobileLayout';
+import MobileMenu from './MobileMenu';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -156,7 +156,8 @@ class BasicLayout extends React.PureComponent {
     if (process.env.NODE_ENV === 'production' && APP_TYPE !== 'site') {
       return null;
     }
-    return <SettingDrawer />;
+    return null;
+    //return <SettingDrawer />;
   };
 
   render() {
@@ -177,37 +178,53 @@ class BasicLayout extends React.PureComponent {
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
     const layout = (
       <Layout>
-        {isTop && !isMobile ? null : (
-          <SiderMenu
-            logo={logo}
-            theme={navTheme}
-            onCollapse={this.handleMenuCollapse}
-            menuData={menuData}
-            isMobile={isMobile}
-            {...this.props} />
-        )}
-        {isMobile ? 
-        (<MobileLayout {...this.props}/>) 
-         : 
-        (<Layout
-          style={{
-            ...this.getLayoutStyle(),
-            minHeight: '100vh',
-          }}
-        >
-          <Header
-            menuData={menuData}
-            handleMenuCollapse={this.handleMenuCollapse}
-            logo={logo}
-            isMobile={isMobile}
-            {...this.props} />
-          <Content className={styles.content} style={contentStyle}>
-            <Authorized authority={routerConfig} noMatch={<Exception403 />}>
-              {children}
-            </Authorized>
-          </Content>
-          <Footer />
-        </Layout>)}
+        {
+          isMobile ? 
+          (<Layout>
+            <MobileMenu 
+              isMobile={isMobile}
+              {...this.props}>
+              <Content className={styles.content} style={contentStyle}>
+                <Authorized authority={routerConfig} noMatch={<Exception403 />}>
+                  {children}
+                </Authorized>
+              </Content>
+            </MobileMenu>
+          </Layout>
+          ) :
+          (
+            <Layout>
+              {isTop ? null : (
+                  <SiderMenu
+                  logo={logo}
+                  theme={navTheme}
+                  onCollapse={this.handleMenuCollapse}
+                  menuData={menuData}
+                  isMobile={isMobile}
+                  {...this.props} />
+                )}
+              <Layout
+                style={{
+                ...this.getLayoutStyle(),
+                minHeight: '100vh',
+                }}
+              >
+                <Header
+                  menuData={menuData}
+                  handleMenuCollapse={this.handleMenuCollapse}
+                  logo={logo}
+                  isMobile={isMobile}
+                  {...this.props} />
+                <Content className={styles.content} style={contentStyle}>
+                <Authorized authority={routerConfig} noMatch={<Exception403 />}>
+                  {children}
+                </Authorized>
+                </Content>
+                <Footer />
+              </Layout>
+            </Layout>
+          ) 
+        }
       </Layout>
     );
     return (

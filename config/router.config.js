@@ -41,6 +41,54 @@ export default [
           },
         ],
       },
+      {
+        path: '/task',
+        icon: 'task',
+        name: 'task',
+        routes: [
+          {
+            path: '/task/tasklist',
+            name: 'tasklist',
+            component: './task/TaskList',
+          },
+        ],
+      },
+      {
+        path: '/view',
+        icon: 'view',
+        name: 'view',
+        routes: [
+          {
+            path: '/view/view',
+            name: 'view',
+            component: './View/View',
+          },
+        ],
+      },
+      {
+        path: '/friend',
+        icon: 'friend',
+        name: 'friend',
+        routes: [
+          {
+            path: '/friend/friend',
+            name: 'friend',
+            component: './Friend/Friend',
+          },
+        ],
+      },
+      {
+        path: '/my',
+        icon: 'my',
+        name: 'my',
+        routes: [
+          {
+            path: '/my/my',
+            name: 'my',
+            component: './My/My',
+          },
+        ],
+      },
       // forms
       {
         path: '/form',
