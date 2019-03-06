@@ -103,6 +103,12 @@ export default {
         collapsed: payload,
       };
     },
+    changeDeviceType(state, { payload }) {
+      return {
+        ...state,
+        isMobile: payload,
+      };
+    },
     saveNotices(state, { payload }) {
       return {
         ...state,

@@ -81,7 +81,11 @@ class BasicLayout extends React.PureComponent {
   componentDidUpdate(preProps) {
     // After changing to phone mode,
     // if collapsed is true, you need to click twice to display
-    const { collapsed, isMobile } = this.props;
+    const { collapsed, isMobile, dispatch } = this.props;
+    dispatch({
+      type: 'global/changeDeviceType',
+      payload: isMobile
+    });
     if (isMobile && !preProps.isMobile && !collapsed) {
       this.handleMenuCollapse(false);
     }
