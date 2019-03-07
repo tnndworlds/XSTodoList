@@ -184,17 +184,16 @@ class BasicLayout extends React.PureComponent {
       <Layout>
         {
           isMobile ? 
-          (<Layout>
+          (
             <MobileMenu 
               isMobile={isMobile}
               {...this.props}>
-              <Content className={styles.content} style={contentStyle}>
+              <Content className={styles.mcontent} style={contentStyle}>
                 <Authorized authority={routerConfig} noMatch={<Exception403 />}>
                   {children}
                 </Authorized>
               </Content>
             </MobileMenu>
-          </Layout>
           ) :
           (
             <Layout>

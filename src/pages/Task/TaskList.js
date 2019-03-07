@@ -1,10 +1,18 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'dva';
+import MTask from './MTask';
+import WTask from './WTask';
+
+@connect(({ global }) => ({
+  global
+}))
 export default class TaskList extends React.Component {
-	
   render() {
-  	const {isMobile} = this.props;
+  	const {global} = this.props;
     return (
-      <div>This is taskList {isMobile}</div>
+      <div>
+      	{global.isMobile ? <MTask/> : <WTask/>}
+      </div>
     );
   }
 }
