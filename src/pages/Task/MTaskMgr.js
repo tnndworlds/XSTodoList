@@ -42,6 +42,9 @@ export default class MTaskMgr extends React.Component {
 	return (<Button type="ghost" size="small" inline>编辑</Button>);
   }
 
+  recoverTodo = ()=>{
+	return (<Button type="ghost" size="small" inline>TODO</Button>);
+  }
 
   getLeftContent = ()=>{
   	const tabs = [
@@ -84,10 +87,10 @@ export default class MTaskMgr extends React.Component {
       		</div>)
   		case 'view':
   			return (<List className="my-list">
-		      			{daytask.taskList.map((task)=>{
-		      				return (
-		              			<Item extra={this.punchBtn()}>{task.title} <Brief>{task.description}</Brief></Item>  
-		  					)
+		      			{daytask.taskList.map((task, index)=>{
+		      				return task.todo ? (
+		              			<Item extra={this.recoverTodo(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
+		  					) : null;
 		      			})}
 		          </List>)		
   		}

@@ -16,24 +16,32 @@ export default class MTask extends React.Component {
     console.log(value);
   }
 
-  getPrompt = (e)=>{
+  getPrompt = (data, index)=>{
+    const { dispatch } = this.props;
   	return (
-		prompt('','备注信息', [
-	{
-		text: '取消'
-	},
-	{
-		text: '打卡', onPress: remark => console.log(remark)
-	}
-	]));
+  		prompt('','备注信息', [
+    	{
+    		text: '取消'
+    	},
+    	{
+    		text: '打卡', onPress: remark => {
+          data.todo = true;
+          data.remark = remark;
+          dispatch({
+            type: 'daytask/todoTask',
+            payload:{
+              index: index,
+              data: data
+            }
+          })
+          console.log(remark, data, index)
+        }
+    	}
+    	]));
   }
   tagsClick = (e)=>{
   	console.log(e);
   	this.getPrompt(e);
-  }
-  punchBtn = ()=>{
-	return (<Button type="ghost" size="small" inline
-		onClick={()=> this.getPrompt()}>打卡</Button>);
   }
 
   render() {
@@ -51,9 +59,9 @@ export default class MTask extends React.Component {
       		onChange={(tab, index) => {console.log('onTabClick', index, tab)}}>
       		<div style={{ alignItems: 'center', justifyContent: 'center'}}>
           <List className="my-list">
-      			{daytask.taskList.map((task)=>{
-      				return (
-              <Item onClick={()=> this.getPrompt()}>{task.title} <Brief>{task.description}</Brief></Item>  
+      			{daytask.taskList.map((task, index)=>{
+      				return task.todo ? null : (
+              <Item onClick={()=> this.getPrompt(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
   					)
       			})}
           </List>
