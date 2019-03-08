@@ -18,7 +18,7 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/', redirect: '/taskmgr/taskmgr' },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -42,14 +42,26 @@ export default [
         ],
       },
       {
-        path: '/task',
-        icon: 'task',
-        name: 'task',
+        path: '/todo',
+        icon: 'todo',
+        name: 'todo',
         routes: [
           {
-            path: '/task/tasklist',
+            path: '/todo/tasklist',
             name: 'tasklist',
-            component: './task/TaskList',
+            component: './Todo/TaskList',
+          },
+        ],
+      },
+      {
+        path: '/taskmgr',
+        icon: 'taskmgr',
+        name: 'taskmgr',
+        routes: [
+          {
+            path: '/taskmgr/taskmgr',
+            name: 'taskmgr',
+            component: './Task/TaskMgr',
           },
         ],
       },

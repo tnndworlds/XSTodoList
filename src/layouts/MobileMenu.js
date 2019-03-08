@@ -44,8 +44,8 @@ export default class MobileMenu extends React.Component {
           prerenderingSiblingsNumber={0}
         >
           <TabBar.Item
-            title="任务"
-            key="task"
+            title="TODO"
+            key="todo"
             icon={<div style={{
               width: '22px',
               height: '22px',
@@ -59,7 +59,7 @@ export default class MobileMenu extends React.Component {
             selected={this.state.selectedTab === 'blueTab'}
             badge={1}
             onPress={() => {
-              router.push('/task/tasklist');
+              router.push('/todo/tasklist');
               this.setState({
                 selectedTab: 'blueTab',
               });
@@ -68,6 +68,7 @@ export default class MobileMenu extends React.Component {
           >
             {children}
           </TabBar.Item>
+          
           <TabBar.Item
             icon={
               <div style={{
@@ -81,17 +82,16 @@ export default class MobileMenu extends React.Component {
                 height: '22px',
                 background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}/>
             }
-            title="查看"
-            key="view"
-            badge={'new'}
-            selected={this.state.selectedTab === 'redTab'}
+            title="任务"
+            key="task"
+            selected={this.state.selectedTab === 'taskTab'}
             onPress={() => {
-              router.push('/view/view');
+              router.push('/taskmgr/taskmgr');
               this.setState({
-                selectedTab: 'redTab',
+                selectedTab: 'taskTab',
               });
             }}
-            data-seed="logId1"
+            data-seed="logIdTask"
           >
             {children}
           </TabBar.Item>

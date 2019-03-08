@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import {Tabs, WingBlank, Badge, Card, WhiteSpace, Button, Grid, Modal  } from 'antd-mobile';
+import {Tabs, WingBlank, Badge, Card, WhiteSpace, Button, Grid, Modal, List  } from 'antd-mobile';
 const prompt = Modal.prompt;
+const Item = List.Item;
+const Brief = Item.Brief;
 
 @connect(({ daytask }) => ({
   daytask
@@ -14,27 +16,24 @@ export default class MTask extends React.Component {
     console.log(value);
   }
 
+  getPrompt = (e)=>{
+  	return (
+		prompt('','备注信息', [
+	{
+		text: '取消'
+	},
+	{
+		text: '打卡', onPress: remark => console.log(remark)
+	}
+	]));
+  }
   tagsClick = (e)=>{
   	console.log(e);
-  	prompt('', e.text + '-备注信息', [
-		{
-			text: '取消'
-		},
-		{
-			text: '打卡', onPress: remark => console.log(remark)
-		}
-	])
+  	this.getPrompt(e);
   }
   punchBtn = ()=>{
 	return (<Button type="ghost" size="small" inline
-			onClick={()=> prompt('', '备注信息', [
-					{
-						text: '取消'
-					},
-					{
-						text: '打卡', onPress: remark => console.log(remark)
-					}
-				])}>打卡</Button>);
+		onClick={()=> this.getPrompt()}>打卡</Button>);
   }
 
   render() {
@@ -46,27 +45,18 @@ export default class MTask extends React.Component {
     return (
       <WingBlank size="sm">
       	<Tabs 
-      	    style={{width: '100%'}}
+      	  style={{width: '100%'}}
       		tabs={tabs}
       		initalPage={1}
       		onChange={(tab, index) => {console.log('onTabClick', index, tab)}}>
       		<div style={{ alignItems: 'center', justifyContent: 'center'}}>
+          <List className="my-list">
       			{daytask.taskList.map((task)=>{
       				return (
-  						<div key={task.title}>
-      						<WhiteSpace size="xs" />
-					        <Card full>
-						      <Card.Header
-						        title={task.title}
-						        extra={this.punchBtn()}/>
-						      <Card.Body>
-						        <div>{task.description}</div>
-						      </Card.Body>
-						      <Card.Footer content={task.plan} extra={<div>{task.ref}</div>} />
-						    </Card>
-					    </div>
+              <Item onClick={()=> this.getPrompt()}>{task.title} <Brief>{task.description}</Brief></Item>  
   					)
       			})}
+          </List>
 	        </div>
 	        <div style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
 		        <Grid data={daytask.tagList} columnNum={3} onClick={this.tagsClick}/>
