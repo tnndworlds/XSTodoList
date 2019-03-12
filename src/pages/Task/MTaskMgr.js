@@ -1,8 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import {NavBar, Icon, WingBlank, Tabs, Badge, Card, WhiteSpace, Button, Grid, Modal, Popover, List } from 'antd-mobile';
+const alert = Modal.alert;
 const Item = List.Item;
+const prompt = Modal.prompt;
 const Brief = Item.Brief;
+import router from 'umi/router';
 const myImg = src => <img src={`https://gw.alipayobjects.com/zos/rmsportal/${src}.svg`} className="am-icon am-icon-xs" alt="" />;
 @connect(({ daytask }) => ({
   daytask
@@ -26,24 +29,50 @@ export default class MTaskMgr extends React.Component {
   getPrompt = (e)=>{
   	return (
 		prompt('','备注信息', [
-	{
-		text: '取消'
-	},
-	{
-		text: '打卡', onPress: remark => console.log(remark)
-	}
-	]));
+		{
+			text: '取消'
+		},
+		{
+			text: '打卡', onPress: remark => console.log(remark)
+		}
+		]));
   }
   tagsClick = (e)=>{
   	console.log(e);
   	this.getPrompt(e);
   }
-  punchBtn = ()=>{
-	return (<Button type="ghost" size="small" inline>编辑</Button>);
+
+  addOrUpdateTask = (task)=>{
+	return (<Button 
+			type="ghost" 
+			size="small" 
+			inline
+			onClick={()=>{
+				router.push('/taskmgr/addtask');
+			}}>编辑</Button>);
   }
 
-  recoverTodo = ()=>{
-	return (<Button type="ghost" size="small" inline>TODO</Button>);
+  recoverTodo = (task, index)=>{
+  	const { dispatch } = this.props;
+	return (<Button 
+		type="ghost" 
+		size="small" 
+		inline
+		onClick={()=>{
+			alert('','确定重做？', [
+	    	{ text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+	    	{
+	    	  text: '确定', onPress: () => {
+	          task.todo = false;
+	          dispatch({
+	            type: 'daytask/todoTask',
+	            payload:{
+	              index: index,
+	              data: task
+	            }
+	          })
+	        }}])
+		}}>ReDo</Button>);
   }
 
   getLeftContent = ()=>{
@@ -75,7 +104,7 @@ export default class MTaskMgr extends React.Component {
 					        <Card full>
 						      <Card.Header
 						        title={task.title}
-						        extra={this.punchBtn()}/>
+						        extra={this.addOrUpdateTask(task)}/>
 						      <Card.Body>
 						        <div>{task.description}</div>
 						      </Card.Body>
@@ -103,7 +132,7 @@ export default class MTaskMgr extends React.Component {
   };
 
   onSelect = (opt) => {
-    // console.log(opt.props.value);
+    console.log(opt.props.value);
     this.setState({
       visible: false,
       selected: opt.props.value,
@@ -121,22 +150,22 @@ export default class MTaskMgr extends React.Component {
 	      rightContent={[
 	        <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
 	        <Popover mask
-            overlayClassName="fortest"
-            overlayStyle={{ color: 'currentColor' }}
-            visible={this.state.visible}
-            overlay={[
-              (<Popover.Item key="4" value="scan" icon={myImg('tOtXhkIWzwotgGSeptou')} data-seed="logId">周期任务</Popover.Item>),
-              (<Popover.Item key="5" value="special" icon={myImg('PKAgAqZWJVNwKsAJSmXd')} style={{ whiteSpace: 'nowrap' }}>目标任务</Popover.Item>),
-              (<Popover.Item key="6" value="button ct" icon={myImg('uQIYTFeRrjPELImDRrPt')}>
-                <span style={{ marginRight: 5 }}>快速任务</span>
-              </Popover.Item>),
-            ]}
-            align={{
-              overflow: { adjustY: 0, adjustX: 0 },
-              offset: [-10, 0],
-            }}
-            onVisibleChange={this.handleVisibleChange}
-            onSelect={this.onSelect}
+	            overlayClassName="fortest"
+	            overlayStyle={{ color: 'currentColor' }}
+	            visible={this.state.visible}
+	            overlay={[
+	              (<Popover.Item key="4" value="scan" icon={myImg('tOtXhkIWzwotgGSeptou')} data-seed="logId">周期任务</Popover.Item>),
+	              (<Popover.Item key="5" value="special" icon={myImg('PKAgAqZWJVNwKsAJSmXd')} style={{ whiteSpace: 'nowrap' }}>目标任务</Popover.Item>),
+	              (<Popover.Item key="6" value="button ct" icon={myImg('uQIYTFeRrjPELImDRrPt')}>
+	                <span style={{ marginRight: 5 }}>快速任务</span>
+	              </Popover.Item>),
+	            ]}
+	            align={{
+	              overflow: { adjustY: 0, adjustX: 0 },
+	              offset: [-10, 0],
+	            }}
+	            onVisibleChange={this.handleVisibleChange}
+	            onSelect={this.onSelect}
           >
             <div style={{
               height: '100%',

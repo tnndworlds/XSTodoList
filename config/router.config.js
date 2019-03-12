@@ -18,7 +18,7 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/taskmgr/taskmgr' },
+      { path: '/', redirect: '/todo/tasklist' },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -63,6 +63,11 @@ export default [
             name: 'taskmgr',
             component: './Task/TaskMgr',
           },
+          {
+            path: '/taskmgr/addtask',
+            name: 'addtask',
+            component: './Task/AddTask',
+          }
         ],
       },
       {
