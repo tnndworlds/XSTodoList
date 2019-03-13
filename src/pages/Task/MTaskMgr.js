@@ -118,7 +118,7 @@ export default class MTaskMgr extends React.Component {
   			return (<List className="my-list">
 		      			{daytask.taskList.map((task, index)=>{
 		      				return task.todo ? (
-		              			<Item extra={this.recoverTodo(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
+		              			<Item key={task.title} extra={this.recoverTodo(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
 		  					) : null;
 		      			})}
 		          </List>)		
@@ -165,6 +165,7 @@ export default class MTaskMgr extends React.Component {
 	            overlayClassName="fortest"
 	            overlayStyle={{ color: 'currentColor' }}
 	            visible={this.state.visible}
+	            key='addTask'
 	            overlay={[
 	              (<Popover.Item key="4" value="cycleTask" icon={myImg('tOtXhkIWzwotgGSeptou')} data-seed="logId">周期任务</Popover.Item>),
 	              (<Popover.Item key="5" value="desTask" icon={myImg('PKAgAqZWJVNwKsAJSmXd')} style={{ whiteSpace: 'nowrap' }}>目标任务</Popover.Item>),
