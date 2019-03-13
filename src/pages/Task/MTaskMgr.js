@@ -7,14 +7,15 @@ const prompt = Modal.prompt;
 const Brief = Item.Brief;
 import router from 'umi/router';
 const myImg = src => <img src={`https://gw.alipayobjects.com/zos/rmsportal/${src}.svg`} className="am-icon am-icon-xs" alt="" />;
-@connect(({ daytask }) => ({
-  daytask
+@connect(({ daytask, task }) => ({
+  daytask,
+  task
 }))
 export default class MTaskMgr extends React.Component {
   constructor(props){
   	super(props);
   	this.state = {
-  		currentTab: 'view',
+  		currentTab: 'task',
   		visible: false,
   		selected: '',
   	}
@@ -37,19 +38,19 @@ export default class MTaskMgr extends React.Component {
 		}
 		]));
   }
+
   tagsClick = (e)=>{
   	console.log(e);
   	this.getPrompt(e);
   }
 
-  addOrUpdateTask = (task)=>{
-	return (<Button 
-			type="ghost" 
-			size="small" 
-			inline
-			onClick={()=>{
-				router.push('/taskmgr/addtask');
-			}}>编辑</Button>);
+  addOrUpdateTask = (task, index)=>{
+  	const { dispatch } = this.props;
+	router.push('/taskmgr/addtask');
+	dispatch({
+		type:'task/changeCurrentTask',
+		payload: {data: task, index: index}
+	})
   }
 
   recoverTodo = (task, index)=>{
@@ -77,38 +78,37 @@ export default class MTaskMgr extends React.Component {
 
   getLeftContent = ()=>{
   	const tabs = [
-  		{title: <strong>查看</strong>, key: 'view'},
-  		{title: <strong>任务</strong>, key: 'task'}
+  		{title: <strong>任务</strong>, key: 'task'},
+  		{title: <strong>查看</strong>, key: 'view'}
   	];
   	return (
 		<Tabs 
 	  	    style={{width: '100%'}}
 	  	    tabBarTextStyle={{color: 'black'}}
 	  		tabs={tabs}
-	  		initalPage={1}
+	  		initalPage={0}
 	  		onChange={(tab, index) => {this.setState({currentTab: tab.key})}}>
 	  	</Tabs>
   	)}
 
   getContent = (type)=> {
-  	const { daytask } = this.props;
+  	const { daytask, task } = this.props;
   	console.log(daytask);
   	var retNodes = [];
 	switch(type) {
   		case 'task':
   			return (<div>
-  			{daytask.taskList.map((task)=>{
+  			{task.taskList.map((task, index)=>{
       				return (
-  						<div key={task.title}>
+  						<div key={task.taskName}>
       						<WhiteSpace size="xs" />
-					        <Card full>
+					        <Card full onClick={()=>{this.addOrUpdateTask(task, index)}}>
 						      <Card.Header
-						        title={task.title}
-						        extra={this.addOrUpdateTask(task)}/>
+						        title={task.taskName}/>
 						      <Card.Body>
-						        <div>{task.description}</div>
+						        <div>{task.taskDesc}</div>
 						      </Card.Body>
-						      <Card.Footer content={task.plan} extra={<div>{task.ref}</div>} />
+						      <Card.Footer content={task.taskPlan} extra={<div>{task.taskRemark}</div>} />
 						    </Card>
 					    </div>
   					)
@@ -133,6 +133,18 @@ export default class MTaskMgr extends React.Component {
 
   onSelect = (opt) => {
     console.log(opt.props.value);
+    const { dispatch } = this.props;
+    switch (opt.props.value){
+    	case 'cycleTask':
+    		router.push('/taskmgr/addtask');
+			dispatch({
+				type:'task/changeCurrentTask',
+				payload: {data: {}, index: -1}
+			})
+			return;
+		default:
+			return;
+    }
     this.setState({
       visible: false,
       selected: opt.props.value,
@@ -154,9 +166,9 @@ export default class MTaskMgr extends React.Component {
 	            overlayStyle={{ color: 'currentColor' }}
 	            visible={this.state.visible}
 	            overlay={[
-	              (<Popover.Item key="4" value="scan" icon={myImg('tOtXhkIWzwotgGSeptou')} data-seed="logId">周期任务</Popover.Item>),
-	              (<Popover.Item key="5" value="special" icon={myImg('PKAgAqZWJVNwKsAJSmXd')} style={{ whiteSpace: 'nowrap' }}>目标任务</Popover.Item>),
-	              (<Popover.Item key="6" value="button ct" icon={myImg('uQIYTFeRrjPELImDRrPt')}>
+	              (<Popover.Item key="4" value="cycleTask" icon={myImg('tOtXhkIWzwotgGSeptou')} data-seed="logId">周期任务</Popover.Item>),
+	              (<Popover.Item key="5" value="desTask" icon={myImg('PKAgAqZWJVNwKsAJSmXd')} style={{ whiteSpace: 'nowrap' }}>目标任务</Popover.Item>),
+	              (<Popover.Item key="6" value="quickTask" icon={myImg('uQIYTFeRrjPELImDRrPt')}>
 	                <span style={{ marginRight: 5 }}>快速任务</span>
 	              </Popover.Item>),
 	            ]}
