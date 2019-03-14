@@ -26,6 +26,13 @@ export default {
       });
       if (callback) callback();
     },
+    *deleteTask({ payload, callback }, { call, put }){
+      yield put({
+        type: 'rDeleteTask',
+        payload: payload
+      });
+      if (callback) callback();
+    },
     *updateTask({ payload, callback }, { call, put }){
       yield put({
         type: 'rUpdateTask',
@@ -36,6 +43,15 @@ export default {
   },
 
   reducers: {
+    rDeleteTask(state, action) {
+      console.log(action.payload.index);
+      var taskList =  state.taskList;
+      taskList.splice(action.payload.index, 1);
+      return {
+        ...state,
+        taskList: taskList,
+      };
+    },
     rFetchTask(state, action) {
       return {
         ...state,

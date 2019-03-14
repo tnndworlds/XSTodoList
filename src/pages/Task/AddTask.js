@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { NavBar, Icon, List, InputItem, WhiteSpace, TextareaItem, ActionSheet, Modal } from 'antd-mobile';
+import { NavBar, Icon, List, InputItem, WhiteSpace, TextareaItem, ActionSheet, Modal, Button, Menu, ActivityIndicator } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { connect } from 'dva';
 import router from 'umi/router';
 const prompt = Modal.prompt;
+const alert = Modal.alert;
+import styles from './AddTask.less'
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
 let wrapProps;
 if (isIPhone) {
@@ -28,7 +30,11 @@ export default class AddTask extends React.Component {
 	  		taskRemark: '',
 	  		todo: false
   		},
-  		currentIndex: -1
+  		currentIndex: -1,
+  		repeatPanelVisible: false,
+  		repeatMenuData: [],
+  		customPanelVisible: false,
+  		customMenuData: [],
   	}
   }
 
@@ -41,16 +47,26 @@ export default class AddTask extends React.Component {
   }
 
   handleRepeatClick = ()=>{
-  	const btns = ['不重复', '周一到周五', '每天', '自定义', '取消'];
+  	const menuData = [{value: '1', label: '不重复'},{value: '2', label: '周一到周五'},{value: '3', label: '每天'},{value: '4', label: '自定义'}];
+  	this.setState({repeatPanelVisible: true, customPanelVisible: false});
+  	
+  }
+
+  customDay = ()=>{
+  	const btns = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
   	ActionSheet.showActionSheetWithOptions({
   		options: btns,
   		cancelButtonIndex: btns.length - 1,
   		message: '',
+  		title: '自定义',
   		maskClosable: true,
   		wrapProps,
   		},
 	  	(buttonIndex) => {
-	  		this.setState({data: {...this.state.data, repeatClicked: btns[buttonIndex]}});
+	  		if (buttonIndex != (btns.length-1)){
+	  			this.setState({data: {...this.state.data, repeatClicked: btns[buttonIndex]}});
+	  		}
 	  	});
   }
 
@@ -92,12 +108,44 @@ export default class AddTask extends React.Component {
   	}
   }
 
+  handleDelete = ()=>{
+  	const { dispatch } = this.props;
+
+	alert('','确定删除？', [
+		{ text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+		{
+		  text: '确定', onPress: () => {
+	      dispatch({
+			type: 'task/deleteTask',
+			payload: {index: this.state.currentIndex},
+			callback: (response) => {
+				router.push('/taskmgr/taskmgr')
+			}
+		  })
+	    }}])
+  }
+  onPanelClose = key=> () =>{
+  	this.setState({[key]: false});
+  }
   render() {
+  	const menuData = [{value: '1', label: '不重复'}, 
+  			{value: '2', label: '周一到周五'},
+  			{value: '3', label: '每天'},
+  			{value: '4', label: '自定义'}];
   	const { taskData, isNew } = this.props;
-  	const { data } = this.state;
+  	const { data, repeatMenuData } = this.state;
   	const { getFieldProps } = this.props.form;
     return (
       <div>
+      	 {
+      	 	this.state.currentIndex == -1 ? 
+      	 	'' : 
+      	 	<Button 
+      	 		icon="cross-circle" 
+      	 		onClick = {this.handleDelete}
+      	 		style={{ bottom: '50px', width: '100%', position: 'fixed', color: 'red' }}>
+      	 		删除任务</Button>
+      	 }
       	 <NavBar
 		      mode="light"
 		      icon={<Icon type="cross" size='md'/>}
@@ -143,6 +191,25 @@ export default class AddTask extends React.Component {
             </div>
           </List.Item>
          </List>
+		 <Modal
+		 	popup
+		 	style={{ bottom: '50px', width: '100%'}}
+		 	visible={this.state.repeatPanelVisible}
+		 	onClose={this.onPanelClose('repeatPanelVisible')}
+		 	animationType='slide-up'
+		 	>
+		 	<List renderHeader={() => <div>重复</div>} className="popup-list">
+	            <Menu
+			        className={styles.singleFooMenu}
+			        data={menuData}
+			        value={['1']}
+			        level={1}
+			        height={document.documentElement.clientHeight * 0.3} />
+	            <List.Item>
+	              <Button type="primary" size='small' onClick={()=>{this.setState({repeatPanelVisible: false})}}>取消</Button>
+	            </List.Item>
+	        </List>
+		 </Modal>
       </div>
     );
   }

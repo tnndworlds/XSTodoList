@@ -160,7 +160,6 @@ export default class MTaskMgr extends React.Component {
 	      mode="light"
 	      leftContent={this.getLeftContent()}
 	      rightContent={[
-	        <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
 	        <Popover mask
 	            overlayClassName="fortest"
 	            overlayStyle={{ color: 'currentColor' }}

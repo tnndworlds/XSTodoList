@@ -61,7 +61,7 @@ export default class MTask extends React.Component {
           <List className="my-list">
       			{daytask.taskList.map((task, index)=>{
       				return task.todo ? null : (
-              <Item onClick={()=> this.getPrompt(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
+              <Item key={task.title} onClick={()=> this.getPrompt(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
   					)
       			})}
           </List>
