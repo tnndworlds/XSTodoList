@@ -143,7 +143,7 @@ export default class AddTask extends React.Component {
   	if (data.repeatClicked){
   		if (Array.isArray(data.repeatClicked)){
   			var retContent = '';
-  			data.repeatClicked.map((item)=>{
+  			data.repeatClicked.sort().map((item)=>{
   				retContent = retContent + cusMenuData[item].label + ',';
   			});
   			return retContent.slice(0, -1);
@@ -207,6 +207,7 @@ export default class AddTask extends React.Component {
 			        className={styles.singleFooMenu}
 			        data={this.state.cusMenuData}
 			        level={1}
+			        value={data.repeatClicked}
 			        onOk={(value)=>{
 			        	console.log(value);
 			        	this.setState({
@@ -221,7 +222,7 @@ export default class AddTask extends React.Component {
 		 </Modal>
       	 <NavBar
 		      mode="light"
-		      icon={<Icon type="cross" size='md'/>}
+		      icon={<Icon key="addTask" type="cross" size='md'/>}
 		      onLeftClick={() => {router.push('/taskmgr/taskmgr')}}
 		      rightContent={[
 		        <Icon type="check" size='md' style={{ marginRight: '16px' }} onClick={this.handleOk}></Icon>

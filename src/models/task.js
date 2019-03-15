@@ -53,6 +53,7 @@ export default {
       };
     },
     rFetchTask(state, action) {
+
       return {
         ...state,
         taskList: action.payload,
@@ -66,12 +67,14 @@ export default {
       }
     },
     rAddTask(state, action) {
+      console.log(action.payload);
       return {
         ...state,
         taskList: state.taskList.concat(action.payload),
       };
     },
     rUpdateTask(state, action) {
+      console.log(action.payload);
       var taskList = [...state.taskList];
       taskList[action.payload.index] = action.payload.data;
       return {
