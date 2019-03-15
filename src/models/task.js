@@ -5,7 +5,7 @@ export default {
 
   state: {
     taskList: [
-      {taskName: '读书', taskDesc: '每日读书20页', taskPlan: '计划2019-04-17完成', taskRemark: '人性的弱点', todo: true},
+      {taskName: '读书', taskDesc: '每日读书20页', taskPlan: '计划2019-04-17完成', taskRemark: '人性的弱点',repeatClicked: 2, todo: true},
       {taskName: '跑步', taskDesc: '生命在于运动，跑步产生多巴胺~', taskPlan: '2019, 奔向3000公里', taskRemark: '月跑量均250KM', todo: false}
     ],
     currentTask: {},

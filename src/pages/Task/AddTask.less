@@ -1,9 +1,23 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
 .popup-list .am-list-body {
   height: 210px;
   overflow: auto;
 }
 
 .singleFooMenu {
-  z-index: 90 !important;
+  z-index: 70 !important;
   width: 100%;
+}
+
+.menuMask {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.4;
+  z-index: 69;
 }
