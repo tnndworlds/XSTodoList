@@ -96,39 +96,13 @@ export default class MobileMenu extends React.Component {
             {children}
           </TabBar.Item>
           <TabBar.Item
-            icon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat' }}/>
-            }
-            selectedIcon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat' }}/>
-            }
-            title="朋友"
-            key="friend"
-            dot
-            selected={this.state.selectedTab === 'greenTab'}
-            onPress={() => {
-              router.push('/friend/friend');
-              this.setState({
-                selectedTab: 'greenTab',
-              });
-            }}
-          >
-            {children}
-          </TabBar.Item>
-          <TabBar.Item
             icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
             selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
             title="我的"
             key="my"
             selected={this.state.selectedTab === 'yellowTab'}
             onPress={() => {
-              router.push('/my/my');
+              router.push('/my/setting');
               this.setState({
                 selectedTab: 'yellowTab',
               });

@@ -100,9 +100,20 @@ export default [
         name: 'my',
         routes: [
           {
-            path: '/my/my',
+            path: '/my',
             name: 'my',
-            component: './My/My',
+            routes: [
+              {
+                path: '/my/tagsmgr',
+                name: 'tagsmgr',
+                component: './My/TagsMgr',
+              },
+              {
+                path: '/my/setting',
+                name: 'tagsmgr',
+                component: './My/My',
+              }
+            ]
           },
         ],
       },
