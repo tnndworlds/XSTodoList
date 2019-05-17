@@ -6,6 +6,8 @@ import router from 'umi/router';
 const prompt = Modal.prompt;
 const alert = Modal.alert;
 import styles from './AddTask.less'
+import { getUserId } from '@/utils/user';
+
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
 let wrapProps;
 if (isIPhone) {
@@ -26,11 +28,10 @@ export default class AddTask extends React.Component {
   	this.state = {
   		data: {
   			repeatClicked: 0,
-	  		taskName: '任务',
-	  		taskDesc: '',
-	  		taskPlan: '',
-	  		taskRemark: '',
-	  		todo: false
+	  		NAME: '任务',
+	  		DESCRIPTION: '',
+	  		REMARK: '',
+	  		TODO: false
   		},
   		currentIndex: -1,
   		repeatPanelVisible: false,
@@ -83,10 +84,12 @@ export default class AddTask extends React.Component {
 
   handleOk = ()=>{
   	const { dispatch } = this.props;
+    var saveData = {...this.state.data};
+    saveData.USER = getUserId();
   	if (this.state.currentIndex == -1){
   		dispatch({
   			type: 'task/addTask',
-  			payload: this.state.data,
+  			payload: saveData,
   			callback: (response) => {
   				router.push('/taskmgr/taskmgr')
   			}
@@ -105,7 +108,7 @@ export default class AddTask extends React.Component {
 
   handleDelete = ()=>{
   	const { dispatch } = this.props;
-	alert('','确定删除？', [
+	  alert('','确定删除？', [
 		{ text: '取消', onPress: () => console.log('cancel'), style: 'default' },
 		{
 		  text: '确定', onPress: () => {
@@ -209,7 +212,6 @@ export default class AddTask extends React.Component {
 			        level={1}
 			        value={data.repeatClicked}
 			        onOk={(value)=>{
-			        	console.log(value);
 			        	this.setState({
 				        	data: {...data, repeatClicked: value},
 				        	customPanelVisible:false, 
@@ -220,7 +222,7 @@ export default class AddTask extends React.Component {
 			        multiSelect />
 	        </List>
 		 </Modal>
-      	 <NavBar
+      	<NavBar
 		      mode="light"
 		      icon={<Icon key="addTask" type="cross" size='md'/>}
 		      onLeftClick={() => {router.push('/taskmgr/taskmgr')}}
@@ -229,32 +231,25 @@ export default class AddTask extends React.Component {
 		      ]}
 		    >{isNew ? '添加任务' : '更新任务'}</NavBar>
          <List>
-         <List.Item onClick={()=>this.getPrompt('名称', 'taskName')}> 
-	        <div
-              style={{ width: '100%', textAlign: 'center' }}>
+         <List.Item onClick={()=>this.getPrompt('名称', 'NAME')}> 
+	        <div style={{ width: '100%', textAlign: 'center' }}>
               <div style={{float: 'left'}}>名称</div>
-              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.taskName}<Icon style={{marginTop: '2px'}} type="right" size='md'/></span></div>
+              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.NAME}<Icon style={{marginTop: '2px'}} type="right" size='md'/></span></div>
             </div>
           </List.Item>
-          <List.Item onClick={()=>this.getPrompt('描述', 'taskDesc')}> 
+          <List.Item onClick={()=>this.getPrompt('描述', 'DESCRIPTION')}> 
 	        <div
               style={{ width: '100%', textAlign: 'center' }}>
               <div style={{float: 'left'}}>描述</div>
-              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.taskDesc}<Icon style={{marginTop: '2px'}} type="right"></Icon></span></div>
+              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.DESCRIPTION}<Icon style={{marginTop: '2px'}} type="right"></Icon></span></div>
             </div>
           </List.Item>
-          <List.Item onClick={()=>this.getPrompt('短期目标', 'taskPlan')}> 
-	        <div
-              style={{ width: '100%', textAlign: 'center' }}>
-              <div style={{float: 'left'}}>短期目标</div>
-              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.taskPlan}<Icon style={{marginTop: '2px'}} type="right"></Icon></span></div>
-            </div>
-          </List.Item>
-          <List.Item onClick={()=>this.getPrompt('短期备注', 'taskRemark')}> 
+    
+          <List.Item onClick={()=>this.getPrompt('短期备注', 'REMARK')}> 
 	        <div
               style={{ width: '100%', textAlign: 'center' }}>
               <div style={{float: 'left'}}>短期备注</div>
-              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.taskRemark}<Icon style={{marginTop: '2px'}} type="right"></Icon></span></div>
+              <div style={{float: 'right', color: '#222'}}><span style={{display: 'flex', alignItems: 'center'}}>{data.REMARK}<Icon style={{marginTop: '2px'}} type="right"></Icon></span></div>
             </div>
           </List.Item>
           <List.Item onClick={this.handleRepeatClick}>
@@ -265,7 +260,6 @@ export default class AddTask extends React.Component {
             </div>
           </List.Item>
          </List>
-		 
       </div>
     );
   }

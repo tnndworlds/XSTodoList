@@ -1,23 +1,44 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import {Tabs, WingBlank, Badge, Card, WhiteSpace, Button, Grid, Modal, List  } from 'antd-mobile';
 const prompt = Modal.prompt;
 const Item = List.Item;
 const Brief = Item.Brief;
 
+import { getUserId } from '@/utils/user';
+
 @connect(({ daytask }) => ({
   daytask
 }))
 export default class MTask extends React.Component {
+
+  componentDidMount(){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'daytask/fetch',
+      payload:{
+        queryId: 'queryTodos',
+        userId: getUserId()
+      }
+    });
+  }
+
   tabChange = (e) => {
   	console.log(`selectedIndex:${e.nativeEvent.selectedSegmentIndex}`);
   }	
+
   onValueChange = (value) => {
     console.log(value);
   }
 
-  getPrompt = (data, index)=>{
+  getPrompt = (data, index, type)=>{
     const { dispatch } = this.props;
+    var saveData = {};
+    saveData.PUNCH_TYPE = type;
+    saveData.TASK_ID = data.id;
+    saveData.USER_ID = getUserId();
+    saveData.PUNCH_DATE = moment().format('YYYYMMDD');
   	return (
   		prompt('','备注信息', [
     	{
@@ -25,23 +46,23 @@ export default class MTask extends React.Component {
     	},
     	{
     		text: '打卡', onPress: remark => {
-          data.todo = true;
-          data.remark = remark;
+          saveData.REMARK = remark;
           dispatch({
-            type: 'daytask/todoTask',
+            type: 'daytask/punch',
             payload:{
               index: index,
-              data: data
+              punchType: type,
+              data: saveData
             }
           })
-          console.log(remark, data, index)
         }
     	}
     	]));
   }
-  tagsClick = (e)=>{
+
+  tagsClick = (e, index)=>{
   	console.log(e);
-  	this.getPrompt(e);
+  	this.getPrompt(e, index, 2);
   }
 
   render() {
@@ -58,13 +79,13 @@ export default class MTask extends React.Component {
       		initalPage={1}
       		onChange={(tab, index) => {console.log('onTabClick', index, tab)}}>
       		<div style={{ alignItems: 'center', justifyContent: 'center'}}>
-          <List className="my-list">
-      			{daytask.taskList.map((task, index)=>{
-      				return task.todo ? null : (
-              <Item key={task.title} onClick={()=> this.getPrompt(task, index)}>{task.title} <Brief>{task.description}</Brief></Item>  
-  					)
-      			})}
-          </List>
+            <List className="my-list">
+        			{daytask.taskList.map((task, index)=>{
+        				return task.TODO ? null : (
+                <Item key={task.NAME} onClick={()=> this.getPrompt(task, index, 1)}>{task.NAME} <Brief>{task.DESCRIPTION}</Brief></Item>  
+    					)
+        			})}
+            </List>
 	        </div>
 	        <div style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
 		        <Grid data={daytask.tagList} columnNum={3} onClick={this.tagsClick}/>

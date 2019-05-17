@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import router from 'umi/router';
+import TODO_1 from '../assets/TODO_1.svg';
+import TODO_2 from '../assets/TODO_2.svg';
+import logo from '../assets/logo.svg';
+import IconFont from '@/utils/IconFont';
+
 const data = [
   {
     img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
@@ -46,15 +51,19 @@ export default class MobileMenu extends React.Component {
           <TabBar.Item
             title="TODO"
             key="todo"
-            icon={<div style={{
-              width: '22px',
-              height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat' }}/>
+            icon={<IconFont 
+              type="icon-icon_renwujincheng" 
+              style={{ 
+                fontSize: '22px',
+                color: '#8a8a8a' 
+              }} />
             }
-            selectedIcon={<div style={{
-              width: '22px',
-              height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat' }}/>
+            selectedIcon={<IconFont 
+              type="icon-icon_renwujincheng" 
+              style={{ 
+                fontSize: '22px', 
+                color: '#1296db' 
+              }} />
             }
             selected={this.state.selectedTab === 'blueTab'}
             badge={1}

@@ -1,26 +1,23 @@
 import { queryFakeList, removeFakeList, addFakeList, updateFakeList } from '@/services/api';
+import { tQuery } from '@/services/tquery';
 
 export default {
   namespace: 'tags',
 
   state: {
     tagList: [
-     {value: 0, label: '登山'},
-     {value: 1, label: '做饭'},
-     {value: 2, label: '看电影'},
-     {value: 3, label: '游泳'},
-     {value: 4, label: '丛丛'},
-     {value: 5, label: '晚刷牙'},
     ],
   },
 
   effects: {
-    *fetchTags({ payload }, { call, put }){
+    *fetch({ payload }, { call, put }){
+      const response = yield call(tQuery, payload);
       yield put({
         type: 'rFetchTags',
-        payload: payload
+        payload: response.data.queryTags.data
       })
     },
+
     *addTags({ payload, callback }, { call, put }){
       yield put({
         type: 'rAddTags',
@@ -38,6 +35,13 @@ export default {
   },
 
   reducers: {
+    rFetchTags(state, action) {
+      return {
+        ...state,
+        tagList: action.payload,
+      };
+    },
+
     rDeleteTags(state, action) {
       console.log(action.payload.index);
       var taskList =  state.taskList;
@@ -47,13 +51,7 @@ export default {
         taskList: taskList,
       };
     },
-    rFetchTags(state, action) {
-
-      return {
-        ...state,
-        taskList: action.payload,
-      };
-    },
+  
     rAddTags(state, action) {
       console.log(action.payload);
       return {

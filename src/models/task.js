@@ -1,27 +1,35 @@
 import { queryFakeList, removeFakeList, addFakeList, updateFakeList } from '@/services/api';
+import { tQuery } from '@/services/tquery';
+import { crudsave } from '@/services/crud';
 
 export default {
   namespace: 'task',
 
   state: {
-    taskList: [
-      {taskName: '读书', taskDesc: '每日读书20页', taskPlan: '计划2019-04-17完成', taskRemark: '人性的弱点',repeatClicked: 2, todo: true},
-      {taskName: '跑步', taskDesc: '生命在于运动，跑步产生多巴胺~', taskPlan: '2019, 奔向3000公里', taskRemark: '月跑量均250KM', todo: false}
-    ],
+    taskList: [],
     currentTask: {},
     currentIndex: -1
   },
 
   effects: {
-    *fetchTask({ payload }, { call, put }){
+    *fetch({ payload }, { call, put }){
+      const response = yield call(tQuery, payload);
       yield put({
-        type: 'rFetchTask',
-        payload: payload
+        type: 'fetchAction',
+        payload: response.data.AllTasks
       })
     },
     *addTask({ payload, callback }, { call, put }){
+      console.log(payload);
+
+      var reqParam = {};
+      reqParam.type = 'ddTaskDao';
+      reqParam.data = payload;
+      reqParam.dbColumn = false;
+
+      const response = yield call(crudsave, reqParam);
       yield put({
-        type: 'rAddTask',
+        type: 'addAction',
         payload: payload
       });
       if (callback) callback();
@@ -52,11 +60,10 @@ export default {
         taskList: taskList,
       };
     },
-    rFetchTask(state, action) {
-
+    fetchAction(state, action) {
       return {
         ...state,
-        taskList: action.payload,
+        taskList: action.payload.data,
       };
     },
     changeCurrentTask(state, action){
@@ -66,7 +73,7 @@ export default {
         currentIndex: action.payload.index
       }
     },
-    rAddTask(state, action) {
+    addAction(state, action) {
       console.log(action.payload);
       return {
         ...state,

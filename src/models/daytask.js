@@ -1,31 +1,33 @@
 import { queryFakeList, removeFakeList, addFakeList, updateFakeList } from '@/services/api';
+import { tQuery } from '@/services/tquery';
+import { crudsave } from '@/services/crud';
 
 export default {
   namespace: 'daytask',
 
   state: {
-    taskList: [
-      {title: '读书', description: '每日读书20页', plan: '计划2019-04-17完成', ref: '人性的弱点', todo: true},
-      {title: '跑步', description: '生命在于运动，跑步产生多巴胺~', plan: '2019, 奔向3000公里', ref: '月跑量均250KM', todo: false},
-      {title: '王者荣耀', description: '奔向王者', plan: '星耀', ref: '每日一星', todo: false}
-    ],
-    tagList: [
-      {icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png', text:'登山'},
-      {icon: 'https://gw.alipayobjects.com/zos/rmsportal/WXoqXTHrSnRcUwEaQgXJ.png', text:'做饭'},
-      {icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png', text:'看电影'},
-      {icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png', text:'XXX'},
-      {icon: 'https://gw.alipayobjects.com/zos/rmsportal/WXoqXTHrSnRcUwEaQgXJ.png', text:'游泳'},
-      {icon: 'https://gw.alipayobjects.com/zos/rmsportal/WXoqXTHrSnRcUwEaQgXJ.png', text:'丛丛'}
-    ]
+    taskList: [],
+    tagList:[]
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
+      const response = yield call(tQuery, payload);
       yield put({
-        type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
+        type: 'fetchAction',
+        payload: response.data.queryTodos,
       });
+    },
+    *punch({ payload }, { call, put }) {
+      console.log(payload);
+      payload.type = 'punchDataDao';
+      payload.isDbColumn = true;
+
+      const response = yield call(crudsave, payload);
+      yield put({
+        type: 'punchAction',
+        payload: payload
+      })
     },
     *todoTask({ payload }, { call, put }){
       yield put({
@@ -49,7 +51,7 @@ export default {
       }
       const response = yield call(callback, payload); // post
       yield put({
-        type: 'queryList',
+        type: 'fetchAction',
         payload: response,
       });
     },
@@ -67,11 +69,32 @@ export default {
         taskList: taskList
       }
     },
-    queryList(state, action) {
+    fetchAction(state, action) {
       return {
         ...state,
-        list: action.payload,
+        taskList: action.payload.dTask,
+        tagList: action.payload.tags
       };
+    },
+    punchAction(state, action){
+      switch (action.payload.punchType){
+        case 1:
+          var taskList = state.taskList;
+          taskList[action.payload.index].todo = 'true';
+          return {
+            ...state,
+            taskList: taskList
+          };
+        case 2:
+          var tagList = state.tagList;
+          tagList[action.payload.index].todo = 'true';
+          return {
+            ...state,
+            tagList: tagList
+          };
+        default:
+          return state;
+      }
     },
     appendList(state, action) {
       return {

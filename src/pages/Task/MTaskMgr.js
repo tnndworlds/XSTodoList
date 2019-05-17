@@ -6,6 +6,9 @@ const Item = List.Item;
 const prompt = Modal.prompt;
 const Brief = Item.Brief;
 import router from 'umi/router';
+
+import { getUserId } from '@/utils/user';
+
 const myImg = src => <img src={`https://gw.alipayobjects.com/zos/rmsportal/${src}.svg`} className="am-icon am-icon-xs" alt="" />;
 @connect(({ daytask, task }) => ({
   daytask,
@@ -20,6 +23,19 @@ export default class MTaskMgr extends React.Component {
   		selected: '',
   	}
   }
+
+  componentDidMount(){
+  	const { dispatch } = this.props;
+  	dispatch({
+  		type:'task/fetch',
+  		payload:{
+  			queryId: 'AllTasks',
+  			userId: getUserId(),
+  			conMap:{}
+  		}
+  	});
+  }
+
 
   tabChange = (e) => {
   	console.log(`selectedIndex:${e.nativeEvent.selectedSegmentIndex}`);
@@ -100,15 +116,15 @@ export default class MTaskMgr extends React.Component {
   			return (<div>
   			{task.taskList.map((task, index)=>{
       				return (
-  						<div key={task.taskName}>
+  						<div key={task.NAME}>
       						<WhiteSpace size="xs" />
 					        <Card full onClick={()=>{this.addOrUpdateTask(task, index)}}>
 						      <Card.Header
-						        title={task.taskName}/>
+						        title={task.NAME}/>
 						      <Card.Body>
-						        <div>{task.taskDesc}</div>
+						        <div>{task.DESCRIPTION}</div>
 						      </Card.Body>
-						      <Card.Footer content={task.taskPlan} extra={<div>{task.taskRemark}</div>} />
+						      <Card.Footer extra={<div>{task.REMARK}</div>} />
 						    </Card>
 					    </div>
   					)
@@ -132,7 +148,6 @@ export default class MTaskMgr extends React.Component {
   };
 
   onSelect = (opt) => {
-    console.log(opt.props.value);
     const { dispatch } = this.props;
     switch (opt.props.value){
     	case 'cycleTask':
