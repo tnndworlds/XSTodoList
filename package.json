@@ -34,7 +34,7 @@
     "@antv/data-set": "^0.10.0",
     "@babel/runtime": "^7.3.1",
     "antd": "^3.13.0",
-    "antd-mobile": "^2.2.9",
+    "antd-mobile": "^2.2.13",
     "bizcharts": "^3.4.2",
     "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "chalk": "^2.4.2",

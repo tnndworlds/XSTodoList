@@ -104,14 +104,34 @@ export default [
             name: 'my',
             routes: [
               {
-                path: '/my/tagsmgr',
-                name: 'tagsmgr',
-                component: './My/TagsMgr',
+                path: '/my/setting',
+                name: 'my',
+                component: './My/My',
               },
               {
-                path: '/my/setting',
-                name: 'tagsmgr',
-                component: './My/My',
+                path: '/my/tags',
+                name: 'TagsMgr',
+                component: './My/sub/TagsMgr',
+              },
+              {
+                path: '/my/tags/add',
+                name: 'TagsMgrAdd',
+                component: './My/sub/add/TagAdd',
+              },
+              {
+                path: '/my/goals',
+                name: 'GoalsMgr',
+                component: './My/sub/GoalsMgr',
+              },
+              {
+                path: '/my/strategy',
+                name: 'StrategyMgr',
+                component: './My/sub/StrategyMgr',
+              },
+              {
+                path: '/my/qtask',
+                name: 'QTaskMgr',
+                component: './My/sub/QTaskMgr',
               }
             ]
           },

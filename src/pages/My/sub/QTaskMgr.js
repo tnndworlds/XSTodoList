@@ -6,7 +6,7 @@ const Item = List.Item;
 @connect(({ tags }) => ({
   tags
 }))
-export default class TagsMgr extends React.Component {
+export default class QTaskMgr extends React.Component {
   constructor(props){
   	super(props);
   }
@@ -24,7 +24,7 @@ export default class TagsMgr extends React.Component {
 	      onLeftClick={() => {router.push('/my/setting')}}
 	      rightContent={[
 	        <Icon key="1" type="ellipsis" />,
-	      ]}>标签管理</NavBar>
+	      ]}>备忘管理</NavBar>
 
 	    <List className="my-list">
 	        {

@@ -49,19 +49,19 @@ export default class MobileMenu extends React.Component {
           prerenderingSiblingsNumber={0}
         >
           <TabBar.Item
-            title="TODO"
+            title="Doing"
             key="todo"
             icon={<IconFont 
-              type="icon-icon_renwujincheng" 
+              type="icon-fire" 
               style={{ 
-                fontSize: '22px',
+                fontSize: '24px',
                 color: '#8a8a8a' 
               }} />
             }
             selectedIcon={<IconFont 
-              type="icon-icon_renwujincheng" 
+              type="icon-fire-fill" 
               style={{ 
-                fontSize: '22px', 
+                fontSize: '24px', 
                 color: '#1296db' 
               }} />
             }
@@ -79,19 +79,21 @@ export default class MobileMenu extends React.Component {
           </TabBar.Item>
           
           <TabBar.Item
-            icon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat' }}/>
+            icon={<IconFont 
+              type="icon-dashboard" 
+              style={{ 
+                fontSize: '24px',
+                color: '#8a8a8a' 
+              }} />
             }
-            selectedIcon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}/>
+            selectedIcon={<IconFont 
+              type="icon-dashboard-fill" 
+              style={{ 
+                fontSize: '24px', 
+                color: '#1296db' 
+              }} />
             }
-            title="任务"
+            title="View"
             key="task"
             selected={this.state.selectedTab === 'taskTab'}
             onPress={() => {
@@ -105,9 +107,21 @@ export default class MobileMenu extends React.Component {
             {children}
           </TabBar.Item>
           <TabBar.Item
-            icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
-            selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
-            title="我的"
+            icon={<IconFont 
+              type="icon-setting" 
+              style={{ 
+                fontSize: '24px',
+                color: '#8a8a8a' 
+              }} />
+            }
+            selectedIcon={<IconFont 
+              type="icon-setting-fill" 
+              style={{ 
+                fontSize: '24px', 
+                color: '#1296db' 
+              }} />
+            }
+            title="My"
             key="my"
             selected={this.state.selectedTab === 'yellowTab'}
             onPress={() => {
