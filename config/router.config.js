@@ -129,6 +129,11 @@ export default [
                 component: './My/sub/StrategyMgr',
               },
               {
+                path: '/my/strategy/add',
+                name: 'StrategyAdd',
+                component: './My/sub/add/StrategyAdd',
+              },
+              {
                 path: '/my/qtask',
                 name: 'QTaskMgr',
                 component: './My/sub/QTaskMgr',
