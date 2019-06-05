@@ -21,6 +21,7 @@ import IconFont from '@/utils/IconFont';
 import { createForm } from 'rc-form';
 import styles from './add.less';
 import { getUserId } from '@/utils/user';
+import { arrayToString } from '@/utils/DataAdapter';
 @connect(({ strategy }) => ({
   strategy,
 }))
@@ -52,6 +53,7 @@ class StrategyAdd extends React.Component {
         console.log(this.props.form.getFieldsValue());
         var saveData = { ...this.props.form.getFieldsValue() };
         saveData.USER_ID = getUserId();
+        saveData.PARAM = arrayToString(this.state.checkValue, '-', '-', ',');
         console.log(saveData);
         
       } else {
