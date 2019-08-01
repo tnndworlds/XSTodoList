@@ -71,7 +71,7 @@ class TagAdd extends React.Component {
     this.props.form.resetFields();
   };
   validateAccount = (rule, value, callback) => {
-    if (value && value.length > 2) {
+    if (value && value.length >= 2) {
       callback();
     } else {
       callback(new Error('At least four characters for account'));

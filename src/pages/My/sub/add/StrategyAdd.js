@@ -50,16 +50,23 @@ class StrategyAdd extends React.Component {
     const { dispatch } = this.props;
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
-        console.log(this.props.form.getFieldsValue());
         var saveData = { ...this.props.form.getFieldsValue() };
         saveData.USER_ID = getUserId();
         saveData.PARAM = arrayToString(this.state.checkValue, '-', '-', ',');
-        console.log(saveData);
-        
+        dispatch({
+          type: 'strategy/add',
+          payload:saveData,
+          callback: response=>{
+            Toast.success('策略添加成功', 2);
+            router.push('/my/strategy')
+          }
+        })
       } else {
         alert('Validation failed');
       }
     });
+
+
   };
 
   checkBoxChange = (values)=>{

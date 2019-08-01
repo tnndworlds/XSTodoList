@@ -72,8 +72,8 @@ export default {
     fetchAction(state, action) {
       return {
         ...state,
-        taskList: action.payload.dTask,
-        tagList: action.payload.tags
+        taskList: action.payload.dTask ? action.payload.dTask : [],
+        tagList: action.payload.tags ? action.payload.tags : []
       };
     },
     punchAction(state, action){

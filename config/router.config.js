@@ -124,6 +124,11 @@ export default [
                 component: './My/sub/GoalsMgr',
               },
               {
+                path: '/my/goals/add',
+                name: 'GoalsAdd',
+                component: './My/sub/add/GoalsAdd',
+              },
+              {
                 path: '/my/strategy',
                 name: 'StrategyMgr',
                 component: './My/sub/StrategyMgr',
