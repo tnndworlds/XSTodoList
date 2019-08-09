@@ -33,6 +33,8 @@ class GoalsAdd extends React.Component {
     this.state = {
       currentGoal:{},
       strategys: [],
+      quantization: false,
+      isNew: true,
       unit:[
         {
           label: '个',
@@ -60,32 +62,38 @@ class GoalsAdd extends React.Component {
       }
     });
     const {
-      strategy: { strategyList, currentGoals },
+      strategy: { strategyList },
+      goals:{currentGoal}
     } = this.props;
     var strategys = [];
-    console.log(strategyList);
     strategyList.map((item)=>{
       strategys.push({
         label: item.TITLE,
         value: item.ID
       })
     })
+
+    console.log(currentGoal);
     this.setState({
       ...this.state,
       strategys: strategys,
-      currentGoals: currentGoals
+      currentGoal: currentGoal,
+      isNew: JSON.stringify(currentGoal) == "{}",
+      quantization: JSON.stringify(currentGoal) === "{}" ? 0 : currentGoal.QUANTIZATION
     })  
 
   }
 
   onSubmit = () => {
     const { dispatch } = this.props;
+    const { isNew, currentGoal } = this.state;
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
-        var saveData = { ...this.props.form.getFieldsValue() };
+        var saveData = {...this.props.form.getFieldsValue() };
         saveData.USER_ID = getUserId();
+        saveData.ID = isNew ? null : currentGoal.ID;
         dispatch({
-          type: 'goals/add',
+          type: isNew ? 'goals/add' : 'goals/update',
           payload:saveData,
           callback: response=>{
             Toast.success('策略目标成功', 2);
@@ -96,9 +104,15 @@ class GoalsAdd extends React.Component {
         alert('Validation failed');
       }
     });
-
-
   };
+
+  getArrayValue = (arrStr) => {
+    var retArray = [];
+    arrStr.slice(1,-1).split(',').map((item)=>{
+      retArray.push("" + item);
+    });
+    return retArray;
+  }
 
   onReset = () => {
     this.props.form.resetFields();
@@ -107,7 +121,8 @@ class GoalsAdd extends React.Component {
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
     const {goals, strategyList} = this.props;
-    const { goal} = this.state;
+    const { currentGoal} = this.state;
+    console.log(currentGoal.STRATEGY ? this.getArrayValue(currentGoal.STRATEGY) : '');
     return (
       <div>
         <NavBar
@@ -122,7 +137,7 @@ class GoalsAdd extends React.Component {
         <List renderFooter={() => getFieldError('TITLE') && getFieldError('TITLE').join(',')}>
           <InputItem
             {...getFieldProps('TITLE', {
-              // initialValue: 'little ant',
+              initialValue: currentGoal.TITLE ? currentGoal.TITLE : '',
               rules: [
                 { required: true, message: '请输入目标名称' },
                 { validator: this.validateAccount },
@@ -139,7 +154,7 @@ class GoalsAdd extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('DESCRIPTION', {
-              // initialValue: 'little ant',
+              initialValue: currentGoal.DESCRIPTION ? currentGoal.DESCRIPTION : '',
               rules: [
                 { required: true, message: '请输入描述信息' },
                 { validator: this.validateAccount },
@@ -156,7 +171,7 @@ class GoalsAdd extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('REMARK', {
-              // initialValue: 'little ant',
+              initialValue: currentGoal.REMARK ? currentGoal.REMARK : '',
               rules: [
                 { required: true, message: '请输入备注信息' },
                 { validator: this.validateAccount },
@@ -172,8 +187,10 @@ class GoalsAdd extends React.Component {
             备注
           </InputItem>
 
-          <Picker data={this.state.strategys} cols={1} {...getFieldProps('STRATEGY')} className="forss"
-            >
+          <Picker data={this.state.strategys} cols={1} 
+            {...getFieldProps('STRATEGY',{
+             initialValue:  currentGoal.STRATEGY ? this.getArrayValue(currentGoal.STRATEGY) : ''
+            })} className="forss">
             <Item arrow="horizontal">执行策略</Item>
           </Picker>
 
@@ -204,7 +221,7 @@ class GoalsAdd extends React.Component {
             <div>
                <InputItem
                 {...getFieldProps('COUNT', {
-                  // initialValue: 'little ant',
+                  initialValue: currentGoal.COUNT ? currentGoal.COUNT : '',
                   rules: [
                     { required: true, message: '数量' },
                     { validator: this.validateAccount },
@@ -219,7 +236,10 @@ class GoalsAdd extends React.Component {
               >
                 数量
               </InputItem>
-              <Picker data={this.state.unit} cols={1} {...getFieldProps('UNIT')} className="forss"
+              <Picker data={this.state.unit} cols={1} 
+                {...getFieldProps('UNIT', {
+                  initialValue:  currentGoal.UNIT ? this.getArrayValue(currentGoal.UNIT) : ''
+                })} className="forss"
                 onOk={(value)=>this.props.form.setFieldsValue({'UNIT':value})}>
                 <Item arrow="horizontal">单位</Item>
               </Picker>

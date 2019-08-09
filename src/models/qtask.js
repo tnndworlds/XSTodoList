@@ -3,11 +3,11 @@ import { tQuery } from '@/services/tquery';
 import { crudupdate, crudsave, crudremove } from '@/services/crud';
 
 export default {
-  namespace: 'goals',
+  namespace: 'qtask',
 
   state: {
-    goalsList: [],
-    currentGoal:{},
+    qtaskList: [],
+    currentQTask:{},
     currentIndex: -1
   },
 
@@ -16,7 +16,7 @@ export default {
       const response = yield call(tQuery, payload);
       yield put({
         type: 'fetchAction',
-        payload: response.data.Goals.data,
+        payload: response.data.QTask.data,
       });
       if (callback) {
         callback(response);
@@ -25,7 +25,7 @@ export default {
 
     *add({ payload, callback }, { call, put }) {
       var addModel = {};
-      addModel.type = 'goalDao';
+      addModel.type = 'qTaskDao';
       addModel.isDBColumn = true;
       addModel.data = payload;
       const response = yield call(crudsave, addModel);
@@ -39,7 +39,7 @@ export default {
 
     *update({ payload, callback }, { call, put }) {
       var updateModel = {};
-      updateModel.type = 'goalDao';
+      updateModel.type = 'qTaskDao';
       updateModel.isDBColumn = true;
       updateModel.data = payload;
       console.log(updateModel);
@@ -53,7 +53,7 @@ export default {
 
     *remove({ payload, callback }, { call, put }) {
       var rmModel = {};
-      rmModel.type = 'goalDao';
+      rmModel.type = 'qTaskDao';
       rmModel.isDBColumn = true;
       rmModel.conList = [
         {
@@ -75,41 +75,41 @@ export default {
     fetchAction(state, action) {
       return {
         ...state,
-        goalsList: action.payload,
+        qtaskList: action.payload,
       };
     },
 
     setCurrentGoal(state, action){
       return {
         ...state,
-        currentGoal: action.payload == -1 ? {} : state.goalsList[action.payload],
+        currentQTask: action.payload == -1 ? {} : state.qtaskList[action.payload],
         currentIndex: action.payload
       }
     },
 
     updateAction(state, action) {
-      var goalsList = state.goalsList;
-      goalsList[state.currentIndex] = {
-        ...state.goalsList[state.currentIndex],
+      var qtaskList = state.qtaskList;
+      qtaskList[state.currentIndex] = {
+        ...state.qtaskList[state.currentIndex],
         ...action.payload.data,
       };
       return {
         ...state,
-        goalsList: goalsList,
+        qtaskList: qtaskList,
       };
     },
 
     addAction(state, action) {
       return {
         ...state,
-        goalsList: state.goalsList.push(action.payload),
+        qtaskList: state.qtaskList.push(action.payload),
       };
     },
 
     removeAction(state, action) {
       return {
         ...state,
-        goalsList: state.goalsList.splice(action.payload.index, 1),
+        qtaskList: state.qtaskList.splice(action.payload.index, 1),
       };
     },
   },

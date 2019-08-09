@@ -30,7 +30,8 @@ class StrategyAdd extends React.Component {
     super(props);
     this.state = {
       strategyList: [],
-      editStrategy: {},
+      currentIndex: -1,
+      currentStrategy:{},
       type: 'week',
       checkValue:[]
     };
@@ -38,23 +39,31 @@ class StrategyAdd extends React.Component {
 
   componentDidMount() {
     const {
-      strategy: { strategyList },
+      strategy: { strategyList, currentIndex },
     } = this.props;
+    console.log(strategyList[currentIndex].PARAM.replace(/-/g, '').split(','));
     this.setState({
       ...this.state,
       strategyList: strategyList,
+      currentIndex: currentIndex,
+      type: currentIndex === -1 ? 'week' : strategyList[currentIndex].TYPE,
+      currentStrategy: currentIndex == -1 ? {} : strategyList[currentIndex],
+      checkValue: currentIndex === -1 ? [] : strategyList[currentIndex].PARAM.replace(/-/g, '').split(',')
     });
   }
 
   onSubmit = () => {
     const { dispatch } = this.props;
+    const { currentIndex } = this.state;
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
         var saveData = { ...this.props.form.getFieldsValue() };
         saveData.USER_ID = getUserId();
+        saveData.ID = currentIndex == -1 ? null : currentStrategy.ID;
+        saveData.TYPE=this.state.type;
         saveData.PARAM = arrayToString(this.state.checkValue, '-', '-', ',');
         dispatch({
-          type: 'strategy/add',
+          type: currentIndex == -1 ? 'strategy/add' : 'strategy/update',
           payload:saveData,
           callback: response=>{
             Toast.success('策略添加成功', 2);
@@ -95,9 +104,9 @@ class StrategyAdd extends React.Component {
     items.map((item, index) =>{
       tmpItems.push(item);
       if ((index + 1)%3 == 0 || index === (items.length-1)){
-        var tmpNodes = (<WingBlank><Flex>{
+        var tmpNodes = (<WingBlank key={index}><Flex>{
           tmpItems.map((innerItem) => {
-              return <Flex.Item><Checkbox value={innerItem.key}>{innerItem.value}</Checkbox></Flex.Item>
+              return <Flex.Item key={innerItem.key}><Checkbox value={innerItem.key}>{innerItem.value}</Checkbox></Flex.Item>
           })}
         </Flex></WingBlank>);
         retNodes.push(tmpNodes);
@@ -111,7 +120,8 @@ class StrategyAdd extends React.Component {
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
     const {strategy: {months, weeks}} = this.props;
-    const { type } = this.state;
+    const { type, currentStrategy, currentIndex } = this.state;
+    console.log(type);
     return (
       <div>
         <NavBar
@@ -126,7 +136,7 @@ class StrategyAdd extends React.Component {
         <List renderFooter={() => getFieldError('TITLE') && getFieldError('TITLE').join(',')}>
           <InputItem
             {...getFieldProps('TITLE', {
-              // initialValue: 'little ant',
+              initialValue: currentIndex == -1 ? '' : currentStrategy.TITLE,
               rules: [
                 { required: true, message: '请输入策略名称' },
                 { validator: this.validateAccount },
@@ -143,7 +153,7 @@ class StrategyAdd extends React.Component {
           </InputItem>
           <InputItem
             {...getFieldProps('DESCRIPTION', {
-              // initialValue: 'little ant',
+              initialValue: currentIndex == -1 ? '' : currentStrategy.DESCRIPTION,
               rules: [
                 { required: true, message: '请输入策略名称' },
                 { validator: this.validateAccount },
@@ -160,9 +170,10 @@ class StrategyAdd extends React.Component {
           </InputItem>
           <Item extra={
             <Flex justify="end">
-              <Radio.Group {...getFieldProps('TYPE', {initialValue: 'week', valuePropName: 'TYPE' })}
-                    defaultValue="week" buttonStyle="solid" 
+              <Radio.Group {...getFieldProps('TYPE', { valuePropName: 'TYPE' })}
+                   value={type}
                     onChange={(type)=>{
+                      console.log(type.target.value);
                       this.setState({
                         ...this.state,
                         type: type.target.value
@@ -177,7 +188,8 @@ class StrategyAdd extends React.Component {
           <Item>
           <Flex justify='end'>
             <Checkbox.Group 
-              {...getFieldProps('PARAM', {initialValue: [], valuePropName: 'PARAM' })}
+              {...getFieldProps('PARAM', { valuePropName: 'param' })}
+              value={this.state.checkValue}
               style={{ width: '100%' }} onChange={this.checkBoxChange}>
               {
                 type === 'month' ? 

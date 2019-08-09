@@ -14,6 +14,7 @@ import {
   Button,
   Range,
   Grid,
+  Picker
 } from 'antd-mobile';
 import router from 'umi/router';
 const RadioItem = Radio.RadioItem;
@@ -31,7 +32,7 @@ class TagAdd extends React.Component {
     this.state = {
       imgList: [],
       selectTag: {},
-      icon: '',
+      icon: ['icon-Apple'],
     };
   }
 
@@ -51,7 +52,7 @@ class TagAdd extends React.Component {
       if (!error) {
         console.log(this.props.form.getFieldsValue());
         var saveData = { ...this.props.form.getFieldsValue() };
-        saveData.ICON = this.state.icon;
+        saveData.ICON = this.state.icon[0];
         saveData.USER_ID = getUserId();
         console.log(saveData);
         dispatch({
@@ -77,6 +78,28 @@ class TagAdd extends React.Component {
       callback(new Error('At least four characters for account'));
     }
   };
+
+  itemAdapter = () =>{
+    var retItems = [];
+    this.state.imgList.map((item)=>{
+        var tmpItem = {};
+        tmpItem.value = item.value;
+        tmpItem.label = (
+            <div>
+              <span style={{ paddingRight: '5px' }}>
+                <IconFont
+                  type={item.icon}
+                  style={{
+                    fontSize: '22px',
+                  }}/>
+              </span>
+              <span>{item.label}</span>
+            </div>
+          )
+        retItems.push(tmpItem);
+    });
+    return retItems;
+  }
 
   render() {
     const {
@@ -123,30 +146,14 @@ class TagAdd extends React.Component {
             是否显示
           </Item>
 
-          <Grid
-            data={this.state.imgList}
-            carouselMaxRow={1}
-            isCarousel={true}
-            renderItem={dataItem => (
-              <div style={{ padding: '12.5px' }}>
-                <IconFont
-                  type={dataItem.icon}
-                  style={{
-                    fontSize: '22px',
-                  }}
-                />
-                <div style={{ color: '#888', fontSize: '14px', marginTop: '14px' }}>
-                  {dataItem.text}
-                </div>
-              </div>
-            )}
-            onClick={_el =>
-              this.setState({
-                ...this.state,
-                icon: _el.icon,
-              })
-            }
-          />
+          <Picker data={this.itemAdapter(this.state.imgList)} cols={1} 
+            {...getFieldProps('ICON', {
+              initialValue: this.state.icon
+            })} className="forss"
+            onOk={(value)=>{this.setState({...this.state, icon: value})}}>
+            <Item arrow="horizontal">图片</Item>
+          </Picker>
+
           <Item>
             <Button type="primary" size="small" inline onClick={this.onSubmit}>
               提交

@@ -8,14 +8,14 @@ export default {
   state: {
     tagList: [],
     imgList: [
-      { icon: 'icon-Chicken', label: '鸡肉', text: '鸡肉', selected: true },
-      { icon: 'icon-Banana-', label: '香蕉', text: '香蕉' },
-      { icon: 'icon-Cake', label: '面包', text: '面包' },
-      { icon: 'icon-Apple', label: '苹果', text: '苹果' },
-      { icon: 'icon-Mike', label: '牛奶', text: '牛奶' },
-      { icon: 'icon-Cutlery', label: '餐具', text: '餐具' },
-      { icon: 'icon-food-macaron', label: '马卡龙', text: '马卡龙' },
-      { icon: 'icon-food-popsicle', label: '棒冰', text: '棒冰' },
+      { value: 'icon-Chicken', icon: 'icon-Chicken', label: '鸡肉', text: '鸡肉', selected: true },
+      { value: 'icon-Banana-',icon: 'icon-Banana-', label: '香蕉', text: '香蕉' },
+      { value: 'icon-Cake',icon: 'icon-Cake', label: '面包', text: '面包' },
+      { value: 'icon-Apple',icon: 'icon-Apple', label: '苹果', text: '苹果' },
+      { value: 'icon-Mike',icon: 'icon-Mike', label: '牛奶', text: '牛奶' },
+      { value: 'icon-Cutlery',icon: 'icon-Cutlery', label: '餐具', text: '餐具' },
+      { value: 'icon-food-macaron',icon: 'icon-food-macaron', label: '马卡龙', text: '马卡龙' },
+      { value: 'icon-food-popsicle',icon: 'icon-food-popsicle', label: '棒冰', text: '棒冰' },
     ],
   },
 

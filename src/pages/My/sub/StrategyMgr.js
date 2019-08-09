@@ -45,6 +45,28 @@ export default class StrategyMgr extends React.Component {
     });
   }
 
+  updateStrategy = (index) => {
+    const { dispatch } = this.props;
+    console.log(index);
+    dispatch({
+      type: 'strategy/setCurrent',
+      payload:index
+    })
+
+    router.push('/my/strategy/add')
+  }
+
+  addStrategy = () =>{
+    const { dispatch } = this.props;
+    
+    dispatch({
+      type: 'strategy/setCurrent',
+      payload:-1
+    })
+
+    router.push('/my/strategy/add')
+  }
+
   deleteStrategy = (item, index) => {
     const { dispatch } = this.props;
     alert('删除', '确定删除？', [
@@ -64,6 +86,7 @@ export default class StrategyMgr extends React.Component {
       },
     ]);
   };
+
   render() {
     return (
       <div>
@@ -81,7 +104,7 @@ export default class StrategyMgr extends React.Component {
         <List className="my-list">
           {this.state.strategyList.map((item, index) => {
             return (
-              <WingBlank size="sm">
+              <WingBlank size="sm" key={item.ID}>
                 <WhiteSpace size="sm" />
                 <Card>
                   <Card.Header
@@ -107,13 +130,16 @@ export default class StrategyMgr extends React.Component {
                     content={
                       <IconFont
                         type={item.USER_ID === 'system' ? 'icon-xitong1' : 'icon-zidingyi'}
-                        style={{ fontSize: '24px' }}
-                      />
+                        style={{ fontSize: '24px' }}/>
                     }
                     extra={
                       item.USER_ID === 'system' ? null :
                       <div>
-                        <IconFont style={{ fontSize: '24px' }} type="icon-bianji" />
+                        <IconFont style={{ fontSize: '24px' }} type="icon-bianji" 
+                          onClick = {()=>{
+                            this.updateStrategy(index);
+                          }}
+                        />
                         <IconFont
                           style={{ fontSize: '24px' }}
                           type="icon-delete"
@@ -129,7 +155,7 @@ export default class StrategyMgr extends React.Component {
             );
           })}
           <Item>
-            <Button icon="check-circle-o" onClick={() => router.push('/my/strategy/add')}>
+            <Button icon="check-circle-o" onClick={() => this.addStrategy()}>
               添加策略
             </Button>
           </Item>

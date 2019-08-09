@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import {Card, WingBlank, NavBar, Icon, Tag, List} from 'antd-mobile';
 import router from 'umi/router';
 const Item = List.Item;
-@connect(({ tags }) => ({
-  tags
+@connect(({ qtask }) => ({
+  qtask
 }))
 export default class QTaskMgr extends React.Component {
   constructor(props){
@@ -14,8 +14,7 @@ export default class QTaskMgr extends React.Component {
 
   }
   render() {
-  	const { tags: {tagList} } = this.props;
-  	console.log(tagList);
+  	const { qtask: {qtaskList} } = this.props;
     return (
       <div>
       	<NavBar
@@ -24,14 +23,13 @@ export default class QTaskMgr extends React.Component {
 	      onLeftClick={() => {router.push('/my/setting')}}
 	      rightContent={[
 	        <Icon key="1" type="ellipsis" />,
-	      ]}>备忘管理</NavBar>
+	      ]}>快速备忘</NavBar>
 
 	    <List className="my-list">
 	        {
-		    	tagList.map((tag, index)=>{
-		    		return (<Item extra={tag.extra} >
-		    					<div style={{float: 'left'}}>{tag.label}</div>
-		    					<Icon type='cross'  style={{float: 'right'}} onClick={() => {this.deleteTag(index)}}/>
+		    	qtaskList.map((qtask, index)=>{
+		    		return (<Item>
+		    					<div style={{float: 'left'}}>{qtask.label}</div>
 		    				</Item>)
 		    	})
 		    }

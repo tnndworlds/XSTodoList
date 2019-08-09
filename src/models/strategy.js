@@ -6,6 +6,7 @@ export default {
   namespace: 'strategy',
 
   state: {
+    currentIndex: -1,
     strategyList: [
     ],
     week:[0,1,2,3,4,5,6],
@@ -119,6 +120,13 @@ export default {
         ...state,
         strategyList: action.payload,
       };
+    },
+
+    setCurrent(state, action){
+      return {
+        ...state,
+        currentIndex: action.payload
+      }
     },
 
     updateAction(state, action) {
