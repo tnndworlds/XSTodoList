@@ -45,10 +45,12 @@ class QTaskAdd extends React.Component {
 
   componentDidMount() {
       const { qtask: {currentQTask, currentIndex}} = this.props;
+      console.log(currentQTask);
       this.setState({
           ...this.state,
           currentQTask: currentQTask,
-          isNew: currentIndex == -1
+          isNew: currentIndex == -1,
+          date: currentIndex == -1 ? now : moment(currentQTask.DOING_DATE, 'YYYY-MM-DD', true).toDate()
       })
   }
 
@@ -83,7 +85,7 @@ class QTaskAdd extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-
+    const { currentQTask, isNew } = this.state;
     return (
       <div>
         <NavBar
@@ -98,6 +100,7 @@ class QTaskAdd extends React.Component {
         <List renderFooter={() => getFieldError('TITLE') && getFieldError('TITLE').join(',')}>
           <InputItem
             {...getFieldProps('TITLE', {
+              initialValue: isNew ? '' : currentQTask.TITLE,
               rules: [
                 { required: true, message: '请输入任务名称' },
               ],
@@ -115,12 +118,14 @@ class QTaskAdd extends React.Component {
             mode="date"
             title="执行日期"
             value={this.state.date}
-            format="YYYY-MM-DD"
+            locale={zhCn}
             >
             <List.Item arrow="horizontal">执行日期</List.Item>
           </DatePicker>
           <InputItem
-            {...getFieldProps('DESCRIPTION')}
+            {...getFieldProps('DESCRIPTION',{
+                initialValue: isNew ? '' : currentQTask.DESCRIPTION,
+            })}
             placeholder="描述信息"
           >
             描述

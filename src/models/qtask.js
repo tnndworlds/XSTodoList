@@ -64,7 +64,7 @@ export default {
       const response = yield call(crudremove, rmModel);
       yield put({
         type: 'removeAction',
-        payload: payload,
+        payload: payload.index,
       });
       if (callback) callback(response);
     },
@@ -110,9 +110,11 @@ export default {
     },
 
     removeAction(state, action) {
+      var qTaskList = [...state.qtaskList];
+      qTaskList.splice(action.payload, 1);
       return {
         ...state,
-        qtaskList: state.qtaskList.splice(action.payload.index, 1),
+        qtaskList: qTaskList,
       };
     },
   },

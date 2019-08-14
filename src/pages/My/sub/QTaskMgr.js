@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import {Card, WingBlank, NavBar, Icon, Tag, List, Button} from 'antd-mobile';
+import {Card, WingBlank, NavBar, Icon, Tag, List, Button, Modal} from 'antd-mobile';
 import router from 'umi/router';
 const Item = List.Item;
+const alert = Modal.alert;
 import { getUserId } from '@/utils/user';
 @connect(({ qtask }) => ({
   qtask
@@ -22,8 +23,21 @@ export default class QTaskMgr extends React.Component {
     });
   }
 
-  deleteQTask = (index)=>{
+  deleteQTask = (qtask, index)=>{
+   const { dispatch } = this.props;
 
+   const alertInstance = alert('', '确认删除该快速任务?', [
+	  { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+	  { text: '确认', onPress: () => {
+		dispatch({
+		  type: 'qtask/remove',
+		  payload: {
+			  ID: qtask.ID,
+			  index: index
+		  }
+		})
+	  } },
+	]);
   }
   newQTask = () => {
 	const { dispatch } = this.props;
@@ -33,8 +47,13 @@ export default class QTaskMgr extends React.Component {
     })
     router.push('/my/qtask/add')
   }
-  editQTask = () =>{
-
+  editQTask = (qtask, index) =>{
+	const { dispatch } = this.props;
+    dispatch({
+      type: 'qtask/setCurrentQTask',
+      payload: index
+    })
+    router.push('/my/qtask/add')
   }
   render() {
 	  const { qtask: {qtaskList} } = this.props;
@@ -53,8 +72,8 @@ export default class QTaskMgr extends React.Component {
 	        {
 		    	qtaskList.map((qtask, index)=>{
 		    		return (<Item key={qtask.TITLE}>
-								<div style={{float: 'left'}} onClick={()=>this.editQTask(index)}>{qtask.TITLE}--{qtask.DOING_DATE}</div>
-								<Icon type='cross'  style={{float: 'right'}} onClick={() => {this.deleteQTask(index)}}/>
+								<div style={{float: 'left'}} onClick={()=>this.editQTask(qtask, index)}>{qtask.TITLE}--{qtask.DOING_DATE}</div>
+								<Icon type='cross'  style={{float: 'right'}} onClick={() => {this.deleteQTask(qtask, index)}}/>
 							</Item>)
 		    	})
 			}
