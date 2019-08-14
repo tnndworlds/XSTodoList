@@ -29,10 +29,10 @@ export default {
       addModel.isDBColumn = true;
       addModel.data = payload;
       const response = yield call(crudsave, addModel);
-      addModel.ID = response.data;
+      payload.ID = response.data;
       yield put({
         type: 'addAction',
-        payload: addModel,
+        payload: payload,
       });
       if (callback) callback();
     },
@@ -102,7 +102,7 @@ export default {
     addAction(state, action) {
       return {
         ...state,
-        goalsList: state.goalsList.push(action.payload),
+        goalsList: [action.payload, ...state.goalsList],
       };
     },
 

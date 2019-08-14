@@ -72,10 +72,10 @@ export default {
       addModel.data = payload;
       console.log(addModel);
       const response = yield call(crudsave, addModel);
-      addModel.ID = response.data;
+      payload.ID = response.data;
       yield put({
         type: 'addAction',
-        payload: addModel
+        payload: payload
       });
       if (callback) callback();
     },
@@ -144,7 +144,7 @@ export default {
     addAction(state, action) {
       return {
         ...state,
-        strategyList: state.strategyList.push(action.payload),
+        strategyList: [action.payload, ...state.strategyList],
       };
     },
 

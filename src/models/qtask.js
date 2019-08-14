@@ -4,7 +4,6 @@ import { crudupdate, crudsave, crudremove } from '@/services/crud';
 
 export default {
   namespace: 'qtask',
-
   state: {
     qtaskList: [],
     currentQTask:{},
@@ -29,10 +28,10 @@ export default {
       addModel.isDBColumn = true;
       addModel.data = payload;
       const response = yield call(crudsave, addModel);
-      addModel.ID = response.data;
+      payload.ID = response.data;
       yield put({
         type: 'addAction',
-        payload: addModel,
+        payload: payload,
       });
       if (callback) callback();
     },
@@ -79,7 +78,7 @@ export default {
       };
     },
 
-    setCurrentGoal(state, action){
+    setCurrentQTask(state, action){
       return {
         ...state,
         currentQTask: action.payload == -1 ? {} : state.qtaskList[action.payload],
@@ -100,9 +99,13 @@ export default {
     },
 
     addAction(state, action) {
+      console.log(action.payload);
       return {
         ...state,
-        qtaskList: state.qtaskList.push(action.payload),
+        qtaskList: [
+          action.payload,
+          ...state.qtaskList
+        ],
       };
     },
 

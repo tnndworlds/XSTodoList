@@ -142,6 +142,11 @@ export default [
                 path: '/my/qtask',
                 name: 'QTaskMgr',
                 component: './My/sub/QTaskMgr',
+              },
+              {
+                path: '/my/qtask/add',
+                name: 'QTaskAdd',
+                component: './My/sub/add/QTaskAdd',
               }
             ]
           },
