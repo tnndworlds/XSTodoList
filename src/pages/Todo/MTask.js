@@ -3,22 +3,31 @@ import { connect } from 'dva';
 import moment from 'moment';
 import {Tabs, WingBlank, Badge, Card, WhiteSpace, Button, Grid, Modal, List  } from 'antd-mobile';
 const prompt = Modal.prompt;
+const alert = Modal.alert;
 const Item = List.Item;
 const Brief = Item.Brief;
 
 import { getUserId } from '@/utils/user';
 
-@connect(({ daytask }) => ({
-  daytask
+@connect(({ goals, tags }) => ({
+  goals,
+  tags
 }))
 export default class MTask extends React.Component {
 
   componentDidMount(){
     const { dispatch } = this.props;
     dispatch({
-      type: 'daytask/fetch',
+      type: 'goals/fetch',
       payload:{
-        queryId: 'queryTodos',
+        queryId: 'Goals',
+        userId: getUserId()
+      }
+    });
+    dispatch({
+      type: 'tags/fetch',
+      payload:{
+        queryId: 'Tags',
         userId: getUserId()
       }
     });
@@ -34,43 +43,66 @@ export default class MTask extends React.Component {
 
   getPrompt = (data, index, type)=>{
     const { dispatch } = this.props;
+    console.log(data);
     var saveData = {};
     saveData.PUNCH_TYPE = type;
-    saveData.TASK_ID = data.id;
+    saveData.TASK_ID = data.ID;
     saveData.USER_ID = getUserId();
     saveData.PUNCH_DATE = moment().format('YYYYMMDD');
+
   	return (
-  		prompt('','备注信息', [
+      data.TODO ?
+      alert('取消打卡', '您确定要取消本次打卡？',[
+        {
+          text: '取消'
+        },
+        {
+          text: '确定', onPress: remark => {
+            saveData.REMARK = remark;
+            dispatch({
+              type: type + '/cancelpunch',
+              payload:{
+                index: index,
+                id: data.punchId
+              }
+            })
+          }
+        }
+        ]) 
+      :
+  		prompt('打卡','备注信息', [
     	{
     		text: '取消'
     	},
     	{
-    		text: '打卡', onPress: remark => {
+    		text: '确定', onPress: remark => {
           saveData.REMARK = remark;
           dispatch({
-            type: 'daytask/punch',
+            type: type + '/punch',
             payload:{
               index: index,
-              punchType: type,
               data: saveData
             }
           })
         }
     	}
-    	]));
+      ])
+      
+      
+      );
   }
 
   tagsClick = (e, index)=>{
   	console.log(e);
-  	this.getPrompt(e, index, 2);
+  	this.getPrompt(e, index, 'tags');
   }
 
   render() {
-  	const { daytask } = this.props;
+  	const { goals, tags } = this.props;
   	var tabs = [
-  		{title: <Badge text={daytask.taskList.length + ''}>任务列表</Badge>},
-  		{title: <Badge text={daytask.tagList.length + ''}>日常打卡</Badge>}
-  	];
+  		{title: <Badge text={goals.goalsList.length + ''}>任务列表</Badge>},
+  		{title: <Badge text={tags.tagList.length + ''}>日常打卡</Badge>}
+    ];
     return (
       <WingBlank size="sm">
       	<Tabs 
@@ -80,15 +112,17 @@ export default class MTask extends React.Component {
       		onChange={(tab, index) => {console.log('onTabClick', index, tab)}}>
       		<div style={{ alignItems: 'center', justifyContent: 'center'}}>
             <List className="my-list">
-        			{daytask.taskList.map((task, index)=>{
-        				return task.TODO ? null : (
-                <Item key={task.NAME} onClick={()=> this.getPrompt(task, index, 1)}>{task.NAME} <Brief>{task.DESCRIPTION}</Brief></Item>  
-    					)
+        			{goals.goalsList.map((goal, index)=>{
+        				return goal.dayValid ? (
+                  <Item key={goal.TITLE} onClick={()=> this.getPrompt(goal, index, 'goals')}>
+                    {goal.TITLE}--{goal.TODO}
+                   <Brief>{goal.DESCRIPTION}</Brief></Item>  
+    				  	) : null
         			})}
             </List>
 	        </div>
 	        <div style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-		        <Grid data={daytask.tagList} columnNum={3} onClick={this.tagsClick}/>
+		        <Grid data={tags.tagList} columnNum={3} onClick={this.tagsClick}/>
 	      	</div>
       	</Tabs>
       </WingBlank>

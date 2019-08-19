@@ -20,7 +20,7 @@ export default {
     },
     *punch({ payload }, { call, put }) {
       console.log(payload);
-      payload.type = 'punchDataDao';
+      payload.type = 'punchDao';
       payload.isDbColumn = true;
 
       const response = yield call(crudsave, payload);
