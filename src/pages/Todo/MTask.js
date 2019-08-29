@@ -5,6 +5,7 @@ import {Tabs, WingBlank, Badge, Card, WhiteSpace, Button, Grid, Modal, List  } f
 const prompt = Modal.prompt;
 const alert = Modal.alert;
 const Item = List.Item;
+import IconFont from '@/utils/IconFont';
 const Brief = Item.Brief;
 
 import { getUserId } from '@/utils/user';
@@ -122,7 +123,22 @@ export default class MTask extends React.Component {
             </List>
 	        </div>
 	        <div style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-		        <Grid data={tags.tagList} columnNum={3} onClick={this.tagsClick}/>
+            <Grid data={tags.tagList} 
+                  columnNum={3} 
+                  onClick={this.tagsClick}
+                  renderItem={dateItem => (
+                    <div style={{padding: '12.5px'}}>
+                      <IconFont
+                        type={dateItem.ICON}
+                        style={{
+                          fontSize: '22px',
+                        }}/>
+                      <div style={{color: '#888', fontSize: '14px', marginTop:'12px'}}>
+                        <span>{dateItem.text}</span>
+                      </div>
+                    </div>
+                  )}
+                  />
 	      	</div>
       	</Tabs>
       </WingBlank>
